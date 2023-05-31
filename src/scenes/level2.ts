@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter"; // this is the shared events emitter
 
-export default class Game extends Phaser.Scene {
+export default class Level2 extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private spaceship?: Phaser.Physics.Matter.Sprite;
   private upgraded: boolean = false;
@@ -16,11 +16,12 @@ export default class Game extends Phaser.Scene {
   private laserSound!: Phaser.Sound.BaseSound;
   private explosionSound!: Phaser.Sound.BaseSound;
   private powerupSound!: Phaser.Sound.BaseSound;
+  private backgroundMusic!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
 
   constructor() {
-    super("game");
+    super("level2");
   }
 
   init() {
@@ -164,20 +165,8 @@ export default class Game extends Phaser.Scene {
           powerup.setData("type", "shield");
           break;
 
-        case "asteroid":
-          const meteor = this.matter.add.sprite(
-            x + Math.floor(Math.random() * 701),
-            y,
-            "space",
-            "Meteors/meteorBrown_big1.png",
-            {
-              isStatic: true,
-              isSensor: true,
-            }
-          );
-
-          meteor.setBounce(1);
-          meteor.setData("type", "meteor");
+        case "enemy":
+          this.createEnemy(x + Math.floor(Math.random() * 701), y, -this.speed);
           break;
       }
     });
@@ -213,8 +202,7 @@ export default class Game extends Phaser.Scene {
     this.cameras.main.scrollY -= this.normalSpeed;
     this.spaceship.setVelocityY(-this.normalSpeed);
     if (this.cameras.main.scrollY < 0) {
-      // this.scene.start("level2");
-      this.scene.start("leveltitlescreen");
+      // start level 3 (Boss level)
     }
 
     // handle keyboard input
@@ -259,6 +247,24 @@ export default class Game extends Phaser.Scene {
 
       this.sound.play("laser");
     }
+  }
+
+  createEnemy(x, y, speed) {
+    const enemy = this.matter.add.sprite(
+      x + Math.floor(Math.random() * 701),
+      y,
+      "space",
+      "Enemies/enemyBlack1.png",
+      {
+        isStatic: true,
+        isSensor: true,
+      }
+    );
+
+    enemy.setBounce(1);
+    enemy.setData("type", "enemy");
+
+    this.createLaser(enemy.x, enemy.y - 50, 0, -speed, 0);
   }
 
   createShield(x, y) {

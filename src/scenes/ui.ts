@@ -23,6 +23,7 @@ export default class UI extends Phaser.Scene {
   //Gameover
   private gameFinished = false;
 
+
   constructor() {
     super("ui");
   }
