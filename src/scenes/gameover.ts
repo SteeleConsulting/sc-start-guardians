@@ -25,6 +25,8 @@ export default class GameOver extends Phaser.Scene {
       });
       this.game.scene.remove("game");
     });
+
+    this.gameOverSound = this.sound.add("gameoversound");
   }
 
   update() {}
