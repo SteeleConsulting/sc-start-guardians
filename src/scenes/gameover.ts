@@ -10,13 +10,13 @@ export default class GameOver extends Phaser.Scene {
     }
 
     preload(){
-
+        
     }
 
     create(){
         events.on('gameover', () => {
             this.add.text(600, 480, 'Game Over!', {
-                fontSize: '80px', color: 'white'
+                fontSize: '80px', color: 'red'
             });
         });
     }

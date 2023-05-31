@@ -20,6 +20,10 @@ export default class UI extends Phaser.Scene {
  private livesLabel!: Phaser.GameObjects.Text;
  private lives: number = 3;
 
+ //Game Over Sound
+ private gameoverSound!: Phaser.Sound.BaseSound;
+ private gameoverDone: boolean = false;
+
 
  constructor() {
    super("ui");
@@ -29,7 +33,9 @@ export default class UI extends Phaser.Scene {
  init() {}
 
 
- preload() {}
+ preload() {
+  this.load.audio("gameover", ["powerup.wav"]);
+ }
 
 
  create() {
@@ -102,14 +108,20 @@ export default class UI extends Phaser.Scene {
     this.level++;
     this.levelsLabel.text = "Level: " + this.level;
    })
+
+   this.gameoverSound = this.sound.add("powerup");
   }
 
  update() {
+
   if (this.lives == 0) {
-    events.emit("gameover")
-
+    if (this.gameoverDone == false) {
+      this.gameoverSound.play();
+      console.log("sound");
+    }
+    this.gameoverDone = true;
+    events.emit("gameover");
   }
-
 
   if(this.speedPowerupsCollected  > 0){
     const speedPowerup = this.matter.add.sprite(
