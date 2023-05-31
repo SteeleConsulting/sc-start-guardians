@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-
 import { sharedInstance as events } from "../helpers/eventCenter"; // this is the shared events emitter
 
 export default class Game extends Phaser.Scene {
@@ -19,6 +18,7 @@ export default class Game extends Phaser.Scene {
   private powerupSound!: Phaser.Sound.BaseSound;
   private backgroundMusic!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
+  private shieldPowerupActive = false;
 
   constructor() {
     super("game");
@@ -35,6 +35,7 @@ export default class Game extends Phaser.Scene {
   preload() {
     this.load.image("star", "assets/star2.png");
     this.load.image("boss", "assets/boss.png");
+
     this.load.atlas(
       "explosion",
       "assets/explosion.png",
@@ -105,6 +106,7 @@ export default class Game extends Phaser.Scene {
                 events.emit("powerup-expired");
               }, 5000);
             }
+
             if (spriteB?.getData("type") == "speedup") {
               console.log("collided with speedup");
               events.emit("powerup-collided");
@@ -116,16 +118,23 @@ export default class Game extends Phaser.Scene {
                 events.emit("powerup-expired");
               }, 5000);
             }
-            if (spriteA?.getData("type") == "meteor") {
-              events.emit("life-lost");
-              this.explosionSound.play();
+            //shield
+            if (spriteB?.getData("type") == "shield") {
+              spriteB.destroy();
+              events.emit("shield-collided");
+              this.shieldPowerupActive = true;
+              this.createShield(spriteA.x, spriteA.y);
             }
-            if (spriteB?.getData("type") == "meteor") {
+            if (
+              spriteB?.getData("type") == "meteor" &&
+              this.shieldPowerupActive == false
+            ) {
+              spriteB.destroy();
               events.emit("life-lost");
-              this.explosionSound.play();
             }
           });
           break;
+
         case "speedup":
           const speedup = this.matter.add.sprite(
             x,
@@ -139,6 +148,21 @@ export default class Game extends Phaser.Scene {
           );
           speedup.setBounce(1);
           speedup.setData("type", "speedup");
+          break;
+
+        case "powerup":
+          const powerup = this.matter.add.sprite(
+            x,
+            y,
+            "space",
+            "Power-ups/powerupBlue_shield.png",
+            {
+              isStatic: true,
+              isSensor: true,
+            }
+          );
+          powerup.setBounce(1);
+          powerup.setData("type", "shield");
           break;
 
         case "asteroid":
@@ -238,6 +262,39 @@ export default class Game extends Phaser.Scene {
     }
   }
 
+  createShield(x, y) {
+    this.shieldPowerupActive = true;
+    const shield = this.matter.add.sprite(
+      x,
+      y,
+      "space",
+      "Effects/shield1.png",
+      {
+        isSensor: true,
+      }
+    );
+    shield.setBounce(1);
+    shield.setData("type", "shield");
+    shield.setOnCollide((data: MatterJS.ICollisionPair) => {
+      const spriteA = (data.bodyA as MatterJS.BodyType)
+        .gameObject as Phaser.Physics.Matter.Sprite;
+      const spriteB = (data.bodyB as MatterJS.BodyType)
+        .gameObject as Phaser.Physics.Matter.Sprite;
+
+      if (!spriteA?.getData || !spriteB?.getData) return;
+
+      if (spriteA?.getData("type") == "meteor") {
+        console.log("shiled collided with enemy");
+        spriteA.destroy();
+        spriteB.destroy();
+        this.shieldPowerupActive = false;
+        this.explosionSound.play();
+        events.emit("shield-expired");
+        events.emit("asteroid-destroyed");
+      }
+    });
+  }
+
   // create a laser sprite
   createLaser(
     x: number,
@@ -271,12 +328,6 @@ export default class Game extends Phaser.Scene {
         this.explosionSound.play();
         events.emit("asteroid-destroyed");
       }
-      //  if (spriteB?.getData("type") == "meteor") {
-      //    console.log("collided with enemy");
-      //    spriteB.destroy();
-      //    this.explosionSound.play();
-      //    events.emit("enemy-killed");
-      //  }
     });
 
     // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game

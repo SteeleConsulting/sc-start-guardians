@@ -6,6 +6,7 @@ export default class UI extends Phaser.Scene {
   private powerupsLabel!: Phaser.GameObjects.Text;
   private powerupsCollected: number = 0;
   private speedPowerupsCollected: number = 0;
+  private shieldPowerupsCollected: number = 0;
 
   //Levels
   private levelsLabel!: Phaser.GameObjects.Text;
@@ -65,6 +66,20 @@ export default class UI extends Phaser.Scene {
       this.powerupsLabel.text = "PowerUps: " + this.powerupsCollected;
     });
 
+    //player gains a shield
+    events.on("shield-collided", () => {
+      this.powerupsCollected++;
+      //  this.powerupsLabel.text = "PowerUps: " + this.powerupsCollected;
+      this.powerupsLabel.text = "PowerUps: ";
+      this.shieldPowerupsCollected++;
+    });
+
+    events.on("shield-expired", () => {
+      this.powerupsCollected--;
+      //  this.powerupsLabel.text = "PowerUps: " + this.powerupsCollected;
+      this.shieldPowerupsCollected--;
+    });
+
     //player kills an enemy; gets 10 points
     events.on("enemy-killed", () => {
       this.score += 10;
@@ -118,6 +133,25 @@ export default class UI extends Phaser.Scene {
         speedPowerup.destroy();
         this.speedPowerupsCollected--;
       }, 2000);
+    }
+
+    if (this.shieldPowerupsCollected > 0) {
+      const shieldPowerup = this.matter.add.sprite(
+        250,
+        25,
+        "space",
+        "Power-ups/powerupBlue_shield.png",
+        {
+          isStatic: true,
+          isSensor: true,
+        }
+      );
+      shieldPowerup.setData("type", "shieldPowerup");
+
+      setTimeout(() => {
+        shieldPowerup.destroy();
+        this.shieldPowerupsCollected--;
+      }, 1000);
     }
   }
 }

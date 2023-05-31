@@ -2,31 +2,24 @@ import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter";
 
 export default class GameOver extends Phaser.Scene {
-    private gameOverSound!: Phaser.Sound.BaseSound;
+  private gameOverSound!: Phaser.Sound.BaseSound;
 
-    constructor() {
-        super('gameover');
-    }
+  constructor() {
+    super("gameover");
+  }
 
-    init() {
-    }
+  init() {}
 
-    preload(){
-        this.load.audio("gameover", ["assets/sounds/gameover.mp3"]);
-    }
+  preload() {}
 
-    create(){
-        this.gameOverSound = this.sound.add("gameover");
+  create() {
+    events.on("gameover", () => {
+      this.add.text(600, 480, "Game Over!", {
+        fontSize: "80px",
+        color: "red",
+      });
+    });
+  }
 
-        events.on('gameover', () => {
-            this.add.text(600, 480, 'Game Over!', {
-                fontSize: '80px', color: 'white'
-            });
-            this.gameOverSound.play()
-        });
-    }
-
-    update() {
-
-    }
+  update() {}
 }
