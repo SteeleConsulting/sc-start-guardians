@@ -20,6 +20,9 @@ export default class UI extends Phaser.Scene {
   private livesLabel!: Phaser.GameObjects.Text;
   private lives: number = 3;
 
+  //Gameover
+  private gameFinished = false;
+
   constructor() {
     super("ui");
   }
@@ -112,8 +115,9 @@ export default class UI extends Phaser.Scene {
   }
 
   update() {
-    if (this.lives == 0) {
+    if (this.lives == 0 && !this.gameFinished) {
       events.emit("gameover");
+      this.gameFinished = true;
     }
 
     if (this.speedPowerupsCollected > 0) {
