@@ -2,15 +2,16 @@ import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter";
 
 export default class GameOver extends Phaser.Scene {
-    constructor() {
-        super('gameover');
-    }
+  private gameOverSound!: Phaser.Sound.BaseSound;
 
-    init() {
-    }
+  constructor() {
+    super("gameover");
+  }
+
+  init() {}
 
     preload(){
-        
+
     }
 
     create(){
@@ -21,7 +22,5 @@ export default class GameOver extends Phaser.Scene {
         });
     }
 
-    update() {
-
-    }
+  update() {}
 }
