@@ -128,10 +128,7 @@ export default class Level2 extends Phaser.Scene {
               this.shieldPowerupActive = true;
               this.createShield(spriteA.x, spriteA.y);
             }
-            if (
-              spriteB?.getData("type") == "enemy" &&
-              this.shieldPowerupActive == false
-            ) {
+            if (spriteB?.getData("type") == "enemy") {
               spriteB.destroy();
               events.emit("life-lost");
             }
@@ -286,7 +283,7 @@ export default class Level2 extends Phaser.Scene {
       "space",
       "Enemies/enemyBlack1.png",
       {
-        isStatic: false,
+        isStatic: true,
         isSensor: true,
       }
     );
