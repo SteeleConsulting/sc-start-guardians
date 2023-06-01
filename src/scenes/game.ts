@@ -389,7 +389,7 @@ export default class Game extends Phaser.Scene {
       });
 
       // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout((laser) => laser.destroy(), 3000, laser);
+      setTimeout(() => laser.destroy(), 500);
     } else {
       var laser = this.matter.add.sprite(
         x - 10,
@@ -422,7 +422,7 @@ export default class Game extends Phaser.Scene {
       });
 
       // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout((laser) => laser.destroy(), 3000, laser);
+      setTimeout(() => laser.destroy(), 500);
 
       var laser2 = this.matter.add.sprite(
         x + 10,
@@ -455,7 +455,7 @@ export default class Game extends Phaser.Scene {
       });
 
       // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout((laser2) => laser2.destroy(), 3000, laser2);
+      setTimeout(() => laser2.destroy(), 500);
     }
   }
 
