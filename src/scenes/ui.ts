@@ -21,11 +21,6 @@ export default class UI extends Phaser.Scene {
   private livesLabel!: Phaser.GameObjects.Text;
   private lives: number = 3;
 
-  //Game Over Sound
-  private gameoverSound!: Phaser.Sound.BaseSound;
-  private gameoverDone: boolean = false;
-
-
   constructor() {
     super("ui");
   }
@@ -129,13 +124,9 @@ export default class UI extends Phaser.Scene {
   }
 
   update() {
-
     if (this.lives == 0) {
-      if (this.gameoverDone == false) {
-        this.gameoverSound.play();
-      }
-      this.gameoverDone = true;
       events.emit("gameover");
+      this.gameFinished = true;
     }
 
     if (this.speedPowerupsCollected > 0) {

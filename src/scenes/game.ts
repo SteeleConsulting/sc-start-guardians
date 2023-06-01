@@ -15,13 +15,12 @@ export default class Game extends Phaser.Scene {
  private scrollSpeed = -1;
  private powerUpSpeed = 15;
 
-
- private laserSound!: Phaser.Sound.BaseSound;
- private explosionSound!: Phaser.Sound.BaseSound;
- private powerupSound!: Phaser.Sound.BaseSound;
- private backgroundMusic!: Phaser.Sound.BaseSound;
- private speedPowerUpActive = false;
-
+  private laserSound!: Phaser.Sound.BaseSound;
+  private explosionSound!: Phaser.Sound.BaseSound;
+  private powerupSound!: Phaser.Sound.BaseSound;
+  private backgroundMusic!: Phaser.Sound.BaseSound;
+  private speedPowerUpActive = false;
+  private shieldPowerupActive = false;
 
  constructor() {
    super("game");
@@ -193,28 +192,28 @@ export default class Game extends Phaser.Scene {
    // This checks if the spaceship has been created yet
    return;
 
-   const beam = this.matter.add.sprite(
-    this.spaceship.x,
-    this.spaceship.y + 50,
-    "space",
-    "Effects/fire08.png",
-    {
-      isStatic: true,
-      isSensor: true,
+    const beam = this.matter.add.sprite(
+      this.spaceship.x,
+      this.spaceship.y + 50,
+      "space",
+      "Effects/fire08.png",
+      {
+        isStatic: true,
+        isSensor: true,
+      }
+    );
+    beam.flipY = true;
+    setTimeout(() => {
+      beam.destroy();
+    }, 100);
+
+    // move camera up
+    this.cameras.main.scrollY -= this.normalSpeed;
+    this.spaceship.setVelocityY(-this.normalSpeed);
+    if (this.cameras.main.scrollY < 0) {
+      this.cameras.main.scrollY = 5000;
+      this.spaceship.setY(this.cameras.main.scrollY + 900); // right boundry
     }
-  );
-  beam.flipY = true;
-  setTimeout(() => {
-    beam.destroy();
-  }, 100);
-  
-   // move camera up
-   this.cameras.main.scrollY -= this.normalSpeed;
-   this.spaceship.setVelocityY(-this.normalSpeed);
-   if (this.cameras.main.scrollY < 0) {
-     this.cameras.main.scrollY = 5000;
-     this.spaceship.setY(this.cameras.main.scrollY + 900); // right boundry
-   }
 
 
    // handle keyboard input
