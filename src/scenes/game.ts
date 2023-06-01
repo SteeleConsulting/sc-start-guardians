@@ -119,6 +119,7 @@ export default class Game extends Phaser.Scene {
               setTimeout(() => {
                 this.speedPowerUpActive = false;
                 events.emit("powerup-expired");
+                console.log("speedup expired");
               }, 5000);
             }
             //shield
@@ -134,6 +135,7 @@ export default class Game extends Phaser.Scene {
             ) {
               spriteB.destroy();
               events.emit("life-lost");
+              this.createSpaceshipAnimations();
             }
           });
           break;
@@ -325,6 +327,7 @@ export default class Game extends Phaser.Scene {
       if (!spriteA?.getData || !spriteB?.getData) return;
 
       if (spriteA?.getData("type") == "meteor") {
+        this.createEnemyAnimations();
         console.log("laser collided with enemy");
         spriteA.destroy();
         spriteB.destroy();

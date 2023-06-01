@@ -13,22 +13,20 @@ export default class StartScreen extends Phaser.Scene {
   preload() {}
 
   create() {
-    const startBtn = this.add
-      .text(600, 480, "Start Game", {
-        fontSize: "60px",
-        color: "white",
-      })
-      .setInteractive();
-
-    startBtn.on(
-      "pointerdown",
-      function (pointer) {
-        console.log("start game");
-        this.scene.start("game");
-      },
-      this
-    );
+    this.add.text(380, 480, "Guardians of the Galaxy", {
+      fontSize: "60px",
+      color: "white",
+    });
+    this.add.text(540, 920, "Press spacebar to start Game", {
+      fontSize: "30px",
+      color: "white",
+    });
+    this.input.keyboard.on("keydown-SPACE", this.startScene, this);
   }
 
   update() {}
+
+  startScene() {
+    this.scene.start("game");
+  }
 }

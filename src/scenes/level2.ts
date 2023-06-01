@@ -75,9 +75,6 @@ export default class Level2 extends Phaser.Scene {
     const objectsLayer = map.getObjectLayer("objects");
     objectsLayer.objects.forEach((obj) => {
       const { x = 0, y = 0, name } = obj; // get the coordinates and name of the object from the tile map
-      // console.log(
-      //   "adding object from tilemap at x:" + x + " y:" + y + " name:" + name
-      // );
 
       // find where the objects are in the tile map and add sprites accordingly by object name
       switch (name) {
@@ -256,7 +253,7 @@ export default class Level2 extends Phaser.Scene {
       "space",
       "Enemies/enemyBlack1.png",
       {
-        isStatic: true,
+        isStatic: false,
         isSensor: true,
       }
     );
@@ -264,7 +261,7 @@ export default class Level2 extends Phaser.Scene {
     enemy.setBounce(1);
     enemy.setData("type", "enemy");
 
-    this.createLaser(enemy.x, enemy.y - 50, 0, -speed, 0);
+    // this.createLaser(enemy.x, enemy.y - 50, 0, -speed, 0);
   }
 
   createShield(x, y) {
@@ -327,6 +324,7 @@ export default class Level2 extends Phaser.Scene {
       if (!spriteA?.getData || !spriteB?.getData) return;
 
       if (spriteA?.getData("type") == "meteor") {
+        this.createEnemyAnimations();
         console.log("laser collided with enemy");
         spriteA.destroy();
         spriteB.destroy();
@@ -337,21 +335,6 @@ export default class Level2 extends Phaser.Scene {
 
     // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
     setTimeout((laser) => laser.destroy(), 3000, laser);
-  }
-
-  private spawnEnemy(x, y) {
-    const meteor = this.matter.add.sprite(
-      x,
-      y,
-      "space",
-      "Meteors/meteorBrown_big1.png",
-      {
-        isStatic: true,
-        isSensor: true,
-      }
-    );
-    meteor.setBounce(1);
-    meteor.setData("type", "meteor");
   }
 
   private createSpaceshipAnimations() {
