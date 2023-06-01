@@ -24,11 +24,10 @@ export default class LevelTitleScreen extends Phaser.Scene {
       color: "white",
     });
     console.log("past it");
-    setTimeout(() => {
-      this.scene.start("level2");
-      this.game.scene.remove("leveltitlescreen");
-      this.game.scene.remove("game");
-    }, 2000);
+
+    this.scene.start("level2");
+    this.game.scene.remove("leveltitlescreen");
+    this.game.scene.remove("game");
   }
 
   update() {}
