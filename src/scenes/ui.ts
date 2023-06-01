@@ -148,7 +148,8 @@ export default class UI extends Phaser.Scene {
     switch (this.level) {
       case 1:
         const level1Image = this.matter.add.sprite(
-          150, 65,
+          150,
+          65,
           "space",
           "UI/numeral1.png",
           {
@@ -160,7 +161,8 @@ export default class UI extends Phaser.Scene {
         break;
       case 2:
         const level2Image = this.matter.add.sprite(
-          150, 65,
+          150,
+          65,
           "space",
           "UI/numeral2.png",
           {
@@ -172,7 +174,8 @@ export default class UI extends Phaser.Scene {
         break;
       case 3:
         const level3Image = this.matter.add.sprite(
-          150, 65,
+          150,
+          65,
           "space",
           "UI/numeral3.png",
           {
@@ -191,7 +194,7 @@ export default class UI extends Phaser.Scene {
       const shieldPowerup = this.matter.add.sprite(
         250,
         25,
-        'space',
+        "space",
         "Power-ups/powerupBlue_shield.png",
         {
           isStatic: true,
