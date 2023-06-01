@@ -11,7 +11,7 @@ export default class StartScreen extends Phaser.Scene {
   init() {}
 
   preload() {
-    this.load.audio("neon", ["assets/sounds/neon-sky.mp3"])
+    this.load.audio("neon", ["assets/sounds/neon-sky.mp3"]);
   }
 
   create() {
@@ -34,6 +34,7 @@ export default class StartScreen extends Phaser.Scene {
 
   startScene() {
     this.scene.start("game");
-    this.sound.stopByKey("neon");
+    this.sound.stopByKey("neon")
+    this.game.scene.remove("startscreen");
   }
 }

@@ -1,11 +1,10 @@
 import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter"; // this is the shared events emitter
 
-
-
-export default class Game extends Phaser.Scene {
+export default class Level3 extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private spaceship?: Phaser.Physics.Matter.Sprite;
+  private boss?: Phaser.Physics.Matter.Sprite;
   private upgraded: boolean = false;
   private laserPowerupActive = false;
 
@@ -25,9 +24,8 @@ export default class Game extends Phaser.Scene {
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
 
-
   constructor() {
-    super("game");
+    super("level3");
   }
 
   init() {
@@ -40,6 +38,7 @@ export default class Game extends Phaser.Scene {
 
   preload() {
     this.load.image("star", "assets/star2.png");
+    this.load.image("boss", "assets/boss.png");
 
     this.load.atlas(
       "explosion",
@@ -68,6 +67,7 @@ export default class Game extends Phaser.Scene {
   create() {
     const { width, height } = this.scale; // width and height of the scene
     this.MarioSound = this.sound.add("mario");
+
     this.shieldBrokenSound = this.sound.add("shieldBroken");
 
     // Add random stars background
@@ -162,6 +162,7 @@ export default class Game extends Phaser.Scene {
             }
           });
           break;
+
         case "speedup":
           const speedup = this.matter.add.sprite(
             x,
@@ -204,21 +205,13 @@ export default class Game extends Phaser.Scene {
           helperPowerup.setBounce(1);
           helperPowerup.setData("type", "helper");
           break;
-
-        case "asteroid":
-          const meteor = this.matter.add.sprite(
-            x + Math.floor(Math.random() * 701),
-            y,
-            "space",
-            "Meteors/meteorBrown_big1.png",
-            {
-              isStatic: true,
-              isSensor: true,
-            }
+        case "boss":
+          this.boss = this.matter.add.sprite(
+            this.spaceship!.x,
+            this.spaceship!.y - 500,
+            "boss"
           );
-
-          meteor.setBounce(1);
-          meteor.setData("type", "meteor");
+          this.boss.setVelocityY(-this.normalSpeed);
           break;
       }
     });
@@ -233,7 +226,6 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
-
     if (!this.spaceship?.active)
       // This checks if the spaceship has been created yet
       return;
@@ -396,7 +388,7 @@ export default class Game extends Phaser.Scene {
       setTimeout((laser) => laser.destroy(), 3000, laser);
     } else {
       var laser = this.matter.add.sprite(
-        x - 10,
+        x,
         y,
         "space",
         "Lasers/laserGreen08.png",
@@ -427,39 +419,6 @@ export default class Game extends Phaser.Scene {
 
       // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
       setTimeout((laser) => laser.destroy(), 3000, laser);
-
-      var laser2 = this.matter.add.sprite(
-        x + 10,
-        y,
-        "space",
-        "Lasers/laserGreen08.png",
-        { isSensor: true }
-      );
-      laser2.setVelocityY(ySpeed);
-      this.upgraded;
-      laser2.setData("type", "laser");
-      laser2.setOnCollide((data: MatterJS.ICollisionPair) => {
-        const spriteA = (data.bodyA as MatterJS.BodyType)
-          .gameObject as Phaser.Physics.Matter.Sprite;
-        const spriteB = (data.bodyB as MatterJS.BodyType)
-          .gameObject as Phaser.Physics.Matter.Sprite;
-
-        if (!spriteA?.getData || !spriteB?.getData) return;
-
-        if (spriteA?.getData("type") == "meteor") {
-          console.log("laser collided with enemy");
-          spriteA.play("enemy-explode");
-          setTimeout(() => {
-            spriteA.destroy();
-          }, 500);
-
-          this.explosionSound.play();
-          events.emit("asteroid-destroyed");
-        }
-      });
-
-      // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout((laser2) => laser2.destroy(), 3000, laser2);
     }
   }
 
