@@ -29,8 +29,10 @@ export default class LevelTitleScreen extends Phaser.Scene {
       });
 
     // setTimeout(() => {
-    //   this.scene.start("level2");
+    //   this.scene.start("level3");
     // }, 1000);
+
+    //
   }
 
   update() {}

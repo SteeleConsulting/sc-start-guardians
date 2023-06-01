@@ -131,11 +131,18 @@ export default class UI extends Phaser.Scene {
       this.livesLabel.text = "Lives: " + this.lives;
     });
 
-    //score threshold reached to level up
+    // reached to level up
     events.on("level-up", () => {
       this.level++;
       this.levelsLabel.text = "Level: ";
       this.scene.start("leveltitlescreen");
+    });
+
+    //  reaches boss level
+    events.on("bosslevel-up", () => {
+      this.level++;
+      this.levelsLabel.text = "Level: ";
+      this.scene.start("bosstitlescreen");
     });
   }
 

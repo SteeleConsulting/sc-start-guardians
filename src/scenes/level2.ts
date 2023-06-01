@@ -202,6 +202,8 @@ export default class Level2 extends Phaser.Scene {
     this.spaceship.setVelocityY(-this.normalSpeed);
     if (this.cameras.main.scrollY < 0) {
       // start level 3 (Boss level)
+      events.emit("bosslevel-up");
+
     }
 
     // handle keyboard input
@@ -243,7 +245,6 @@ export default class Level2 extends Phaser.Scene {
         this.shootSpeed,
         0
       );
-
       this.sound.play("laser");
     }
   }
