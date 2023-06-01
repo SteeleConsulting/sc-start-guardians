@@ -152,6 +152,9 @@ export default class UI extends Phaser.Scene {
       this.gameFinished = true;
     }
 
+    /**
+     * display level asset according to level number
+     */
     switch (this.level) {
       case 1:
         const level1Image = this.matter.add.sprite(
