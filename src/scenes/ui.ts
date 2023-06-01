@@ -23,7 +23,7 @@ export default class UI extends Phaser.Scene {
   //Gameover
   private gameFinished = false;
 
-  private backgroundMusic!: Phaser.Sound.BaseSound;
+  private shieldSound!: Phaser.Sound.BaseSound;
 
   constructor() {
     super("ui");
@@ -40,9 +40,15 @@ export default class UI extends Phaser.Scene {
     this.load.image("level1", "UI/numeral1.png");
     this.load.image("level2", "UI/numeral2png");
     this.load.image("level3", "UI/numeral3.png");
+
+    this.load.audio("shield", ["assets/sounds/shield.mp3"]);
   }
 
   create() {
+
+    this.shieldSound = this.sound.add("shield");
+
+
     // add a text label to the screen
     this.powerupsLabel = this.add.text(10, 10, "PowerUps: ", {
       fontSize: "32px",
@@ -100,6 +106,7 @@ export default class UI extends Phaser.Scene {
       this.powerupsCollected++;
       this.powerupsLabel.text = "PowerUps: ";
       this.shieldPowerupsCollected++;
+      this.shieldSound.play()
     });
 
     events.on("shield-expired", () => {
@@ -131,11 +138,19 @@ export default class UI extends Phaser.Scene {
       this.livesLabel.text = "Lives: " + this.lives;
     });
 
-    //score threshold reached to level up
+    // reached to level up
     events.on("level-up", () => {
       this.level++;
       this.levelsLabel.text = "Level: ";
       this.scene.start("leveltitlescreen");
+    });
+
+    //  reaches boss level
+    events.on("bosslevel-up", () => {
+      console.log("Made it to the UI event")
+      this.level++;
+      this.levelsLabel.text = "Level: ";
+      this.scene.start("bosstitlescreen");
     });
 
     //laser power up badge

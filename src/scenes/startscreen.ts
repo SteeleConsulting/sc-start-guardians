@@ -26,14 +26,15 @@ export default class StartScreen extends Phaser.Scene {
     this.input.keyboard.on("keydown-SPACE", this.startScene, this);
 
     //loading music here
-    // this.titleScreenMusic = this.sound.add("neon")
-    // this.titleScreenMusic.play()
+    this.titleScreenMusic = this.sound.add("neon")
+    this.titleScreenMusic.play()
   }
 
   update() {}
 
   startScene() {
     this.scene.start("game");
+    this.sound.stopByKey("neon")
     this.game.scene.remove("startscreen");
   }
 }

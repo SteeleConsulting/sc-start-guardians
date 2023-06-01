@@ -19,6 +19,7 @@ export default class Game extends Phaser.Scene {
   private backgroundMusic!: Phaser.Sound.BaseSound;
   private powerupSound!: Phaser.Sound.BaseSound;
   private MarioSound!: Phaser.Sound.BaseSound;
+  private shieldBrokenSound!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
 
@@ -59,11 +60,15 @@ export default class Game extends Phaser.Scene {
     this.load.audio("powerup", ["assets/sounds/powerup.wav"]);
     this.load.audio("pulsar", ["assets/sounds/pulsar-office.mp3"]);
     this.load.audio("mario", ["assets/sounds/SuperMarioBros-Star.mp3"]);
+    this.load.audio("shieldBroken", ["assets/sounds/cracked-shield.mp3"]);
   }
 
   create() {
     const { width, height } = this.scale; // width and height of the scene
     this.MarioSound = this.sound.add("mario");
+
+    this.shieldBrokenSound = this.sound.add("shieldBroken");
+
     // Add random stars background
     var bg = this.add.group({ key: "star", frameQuantity: 3000 });
 
@@ -112,7 +117,6 @@ export default class Game extends Phaser.Scene {
             }
 
             if (spriteB?.getData("type") == "speedup") {
-              console.log("collided with speedup");
               events.emit("powerup-collided");
               this.powerupSound.play();
               this.MarioSound.play();
@@ -126,6 +130,7 @@ export default class Game extends Phaser.Scene {
             }
             //shield
             if (spriteB?.getData("type") == "shield") {
+              this.shieldBrokenSound.play();
               spriteB.destroy();
               events.emit("shield-collided");
               this.shieldPowerupActive = true;
@@ -224,7 +229,7 @@ export default class Game extends Phaser.Scene {
     this.laserSound = this.sound.add("laser");
     this.backgroundMusic = this.sound.add("pulsar");
 
-    // this.backgroundMusic.play()
+    this.backgroundMusic.play();
   }
 
   update() {
@@ -335,7 +340,7 @@ export default class Game extends Phaser.Scene {
       if (!spriteA?.getData || !spriteB?.getData) return;
 
       if (spriteA?.getData("type") == "meteor") {
-        console.log("shiled collided with enemy");
+        console.log("shield collided with enemy");
         spriteA.destroy();
         spriteB.destroy();
         this.shieldPowerupActive = false;
