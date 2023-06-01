@@ -17,6 +17,7 @@ export default class Level2 extends Phaser.Scene {
   private explosionSound!: Phaser.Sound.BaseSound;
   private powerupSound!: Phaser.Sound.BaseSound;
   private backgroundMusic!: Phaser.Sound.BaseSound;
+  private MarioSound!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
 
@@ -56,10 +57,12 @@ export default class Level2 extends Phaser.Scene {
     this.load.audio("explosion", ["assets/sounds/explosion.mp3"]);
     this.load.audio("powerup", ["assets/sounds/powerup.wav"]);
     this.load.audio("pulsar", ["assets/sounds/pulsar-office.mp3"]);
+    this.load.audio("mario", ["assets/sounds/SuperMarioBros-Star.mp3"]);
   }
 
   create() {
     const { width, height } = this.scale; // width and height of the scene
+    this.MarioSound = this.sound.add("mario");
 
     // Add random stars background
     var bg = this.add.group({ key: "star", frameQuantity: 3000 });
@@ -95,6 +98,7 @@ export default class Level2 extends Phaser.Scene {
             if (spriteA?.getData("type") == "speedup") {
               console.log("collided with speedup");
               this.powerupSound.play();
+              this.MarioSound.play();
               events.emit("powerup-collided");
               spriteB.destroy();
               this.speedPowerUpActive = true;
@@ -108,6 +112,7 @@ export default class Level2 extends Phaser.Scene {
               console.log("collided with speedup");
               events.emit("powerup-collided");
               this.powerupSound.play();
+              this.MarioSound.play();
               spriteB.destroy();
               this.speedPowerUpActive = true;
               setTimeout(() => {
@@ -202,8 +207,8 @@ export default class Level2 extends Phaser.Scene {
     this.spaceship.setVelocityY(-this.normalSpeed);
     if (this.cameras.main.scrollY < 0) {
       // start level 3 (Boss level)
+      console.log("Made it to 209");
       events.emit("bosslevel-up");
-
     }
 
     // handle keyboard input
@@ -289,7 +294,7 @@ export default class Level2 extends Phaser.Scene {
       if (!spriteA?.getData || !spriteB?.getData) return;
 
       if (spriteA?.getData("type") == "meteor") {
-        console.log("shiled collided with enemy");
+        console.log("shield collided with enemy");
         spriteA.destroy();
         spriteB.destroy();
         this.shieldPowerupActive = false;

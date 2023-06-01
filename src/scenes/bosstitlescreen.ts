@@ -2,8 +2,9 @@ import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter";
 import level from "./ui";
 
-export default class LevelTitleScreen extends Phaser.Scene {
+export default class BossTitleScreen extends Phaser.Scene {
   private levelUpSound!: Phaser.Sound.BaseSound;
+  
   constructor() {
     super("bosstitlescreen");
   }
@@ -11,12 +12,12 @@ export default class LevelTitleScreen extends Phaser.Scene {
   init() {}
 
   preload() {
-    // this.load.audio("levelup", ["assets/sounds/LevelUpSound.mp3"]);
+    this.load.audio("levelup", ["assets/sounds/LevelUpSound.mp3"]);
   }
 
   create() {
-    // this.levelUpSound = this.sound.add("levelup");
-    // this.levelUpSound.play();
+    this.levelUpSound = this.sound.add("levelup");
+    this.levelUpSound.play();
 
     console.log("Got to the boss title screen");
     this.add.text(600, 480, "Level 3", {
@@ -28,11 +29,12 @@ export default class LevelTitleScreen extends Phaser.Scene {
         color: "white",
       });
 
-    // setTimeout(() => {
-    //   this.scene.start("level3");
-    // }, 1000);
+    setTimeout(() => {
+        this.scene.start("level3");
+        this.game.scene.remove("bosstitlescreen");
+        this.game.scene.remove("level2");
+    }, 1000);
 
-    //
   }
 
   update() {}

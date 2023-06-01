@@ -34,11 +34,7 @@ export default class StartScreen extends Phaser.Scene {
 
   startScene() {
     this.scene.start("game");
-<<<<<<< HEAD
-    this.sound.stopByKey("neon");
-    this.scene.remove();
-=======
+    this.sound.stopByKey("neon")
     this.game.scene.remove("startscreen");
->>>>>>> origin/roberto
   }
 }
