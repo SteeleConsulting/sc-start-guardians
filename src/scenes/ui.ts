@@ -45,9 +45,7 @@ export default class UI extends Phaser.Scene {
   }
 
   create() {
-
     this.shieldSound = this.sound.add("shield");
-
 
     // add a text label to the screen
     this.powerupsLabel = this.add.text(10, 10, "PowerUps: ", {
@@ -106,7 +104,7 @@ export default class UI extends Phaser.Scene {
       this.powerupsCollected++;
       this.powerupsLabel.text = "PowerUps: ";
       this.shieldPowerupsCollected++;
-      this.shieldSound.play()
+      this.shieldSound.play();
     });
 
     events.on("shield-expired", () => {
@@ -147,7 +145,7 @@ export default class UI extends Phaser.Scene {
 
     //  reaches boss level
     events.on("bosslevel-up", () => {
-      console.log("Made it to the UI event")
+      console.log("Made it to the UI event");
       this.level++;
       this.levelsLabel.text = "Level: ";
       this.scene.start("bosstitlescreen");
@@ -185,7 +183,7 @@ export default class UI extends Phaser.Scene {
       case 1:
         const level1Image = this.matter.add.sprite(
           150,
-          65,
+          68,
           "space",
           "UI/numeral1.png",
           {

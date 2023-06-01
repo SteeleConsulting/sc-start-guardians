@@ -4,6 +4,7 @@ import UI from "./scenes/ui";
 import GameOver from "./scenes/gameover";
 import StartScreen from "./scenes/startscreen";
 import Level2 from "./scenes/level2";
+import Level3 from "./scenes/level3";
 import LevelTitleScreen from "./scenes/leveltitlescreen";
 import BossTitleScreen from "./scenes/bosstitlescreen";
 
@@ -20,7 +21,16 @@ const config: Phaser.Types.Core.GameConfig = {
       },
     },
   },
-  scene: [StartScreen, Game, Level2, UI, GameOver, LevelTitleScreen, BossTitleScreen], // this is the list of scenes to be used in the game, only the first scene is auto launched
+  scene: [
+    StartScreen,
+    Game,
+    Level2,
+    Level3,
+    UI,
+    GameOver,
+    LevelTitleScreen,
+    BossTitleScreen,
+  ], // this is the list of scenes to be used in the game, only the first scene is auto launched
 };
 
 export default new Phaser.Game(config);
