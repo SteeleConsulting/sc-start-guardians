@@ -367,7 +367,7 @@ export default class Level2 extends Phaser.Scene {
 
       if (!spriteA?.getData || !spriteB?.getData) return;
 
-      if (spriteA?.getData("type") == "meteor") {
+      if (spriteA?.getData("type") == "enemy") {
         console.log("laser collided with enemy");
         spriteA.play("enemy-explode");
         spriteB.destroy();
