@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter"; // this is the shared events emitter
 
+
+
 export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private spaceship?: Phaser.Physics.Matter.Sprite;
@@ -16,8 +18,10 @@ export default class Game extends Phaser.Scene {
   private laserSound!: Phaser.Sound.BaseSound;
   private explosionSound!: Phaser.Sound.BaseSound;
   private powerupSound!: Phaser.Sound.BaseSound;
+  private backgroundMusic!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
+
 
   constructor() {
     super("game");
@@ -187,9 +191,12 @@ export default class Game extends Phaser.Scene {
     this.explosionSound = this.sound.add("explosion");
     this.laserSound = this.sound.add("laser");
     this.backgroundMusic = this.sound.add("pulsar");
+
+    this.backgroundMusic.play()
   }
 
   update() {
+
     if (!this.spaceship?.active)
       // This checks if the spaceship has been created yet
       return;

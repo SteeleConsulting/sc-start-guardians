@@ -23,15 +23,15 @@ export default class UI extends Phaser.Scene {
   //Gameover
   private gameFinished = false;
 
-  private backgroundMusic!: Phaser.Sound.BaseSound;
-
+  
   constructor() {
     super("ui");
   }
 
   init() {}
 
-  preload() {}
+  preload() {
+  }
 
   create() {
     // add a text label to the screen
@@ -114,6 +114,7 @@ export default class UI extends Phaser.Scene {
       this.level++;
       this.levelsLabel.text = "Level: " + this.level;
     });
+
   }
 
   update() {
@@ -159,5 +160,6 @@ export default class UI extends Phaser.Scene {
         this.shieldPowerupsCollected--;
       }, 1000);
     }
+
   }
 }

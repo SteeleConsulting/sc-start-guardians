@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter";
 
 export default class StartScreen extends Phaser.Scene {
-  //   private gameOverSound!: Phaser.Sound.BaseSound;
+  private titleScreenMusic!: Phaser.Sound.BaseSound;
 
   constructor() {
     super("startscreen");
@@ -10,25 +10,30 @@ export default class StartScreen extends Phaser.Scene {
 
   init() {}
 
-  preload() {}
+  preload() {
+    this.load.audio("neon", ["assets/sounds/neon-sky.mp3"])
+  }
 
   create() {
-    const startBtn = this.add
-      .text(600, 480, "Start Game", {
-        fontSize: "60px",
-        color: "white",
-      })
-      .setInteractive();
+    this.add.text(380, 480, "Guardians of the Galaxy", {
+      fontSize: "60px",
+      color: "white",
+    });
+    this.add.text(540, 920, "Press spacebar to start Game", {
+      fontSize: "30px",
+      color: "white",
+    });
+    this.input.keyboard.on("keydown-SPACE", this.startScene, this);
 
-    startBtn.on(
-      "pointerdown",
-      function (pointer) {
-        console.log("start game");
-        this.scene.start("game");
-      },
-      this
-    );
+    //loading music here
+    this.titleScreenMusic = this.sound.add("neon")
+    this.titleScreenMusic.play()
   }
 
   update() {}
+
+  startScene() {
+    this.scene.start("game");
+    this.sound.stopByKey("neon");
+  }
 }
