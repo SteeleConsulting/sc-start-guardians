@@ -124,7 +124,7 @@ export default class Level2 extends Phaser.Scene {
               this.createShield(spriteA.x, spriteA.y);
             }
             if (
-              spriteB?.getData("type") == "meteor" &&
+              spriteB?.getData("type") == "enemy" &&
               this.shieldPowerupActive == false
             ) {
               spriteB.destroy();
