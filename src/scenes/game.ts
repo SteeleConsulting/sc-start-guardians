@@ -18,7 +18,6 @@ export default class Game extends Phaser.Scene {
   private laserSound!: Phaser.Sound.BaseSound;
   private explosionSound!: Phaser.Sound.BaseSound;
   private powerupSound!: Phaser.Sound.BaseSound;
-  private backgroundMusic!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
 
@@ -58,20 +57,17 @@ export default class Game extends Phaser.Scene {
    // this file has the start locations of all objects in the game
    this.load.tilemapTiledJSON("spacemap", "assets/space-shooter-tilemap.json");
 
+    this.load.audio("laser", ["assets/sounds/laser.wav"]);
+    this.load.audio("explosion", ["assets/sounds/explosion.mp3"]);
+    this.load.audio("powerup", ["assets/sounds/powerup.wav"]);
+    this.load.audio("pulsar", ["assets/sounds/pulsar-office.mp3"]);
+  }
 
-   this.load.audio("laser", ["assets/sounds/laser.wav"]);
-   this.load.audio("explosion", ["assets/sounds/explosion.mp3"]);
-   this.load.audio("powerup", ["assets/sounds/powerup.wav"]);
-   this.load.audio("pulsar", ["assets/sounds/pulsar-office.mp3"]);
- }
+  create() {
+    const { width, height } = this.scale; // width and height of the scene
 
-
- create() {
-   const { width, height } = this.scale; // width and height of the scene
-
-
-   // Add random stars background
-   var bg = this.add.group({ key: "star", frameQuantity: 3000 });
+    // Add random stars background
+    var bg = this.add.group({ key: "star", frameQuantity: 3000 });
 
 
    var rect = new Phaser.Geom.Rectangle(0, 0, width, 6200);
@@ -109,28 +105,28 @@ export default class Game extends Phaser.Scene {
            const spriteB = (data.bodyB as MatterJS.BodyType)
              .gameObject as Phaser.Physics.Matter.Sprite;
 
-
-           if (!spriteA?.getData || !spriteB?.getData) return;
-           if (spriteA?.getData("type") == "speedup") {
-             console.log("collided with speedup");
-             this.powerupSound.play();
-             events.emit("powerup-collided");
-             spriteB.destroy();
-             this.speedPowerUpActive = true;
-             setTimeout(() => {
-               this.speedPowerUpActive = false;
-               events.emit("powerup-expired");
+            if (!spriteA?.getData || !spriteB?.getData) return;
+            if (spriteA?.getData("type") == "speedup") {
+              console.log("collided with speedup");
+              this.powerupSound.play();
+              events.emit("powerup-collided");
+              spriteB.destroy();
+              this.speedPowerUpActive = true;
+              setTimeout(() => {
+                this.speedPowerUpActive = false;
+                events.emit("powerup-expired");
               }, 5000);
-           }
-           if (spriteB?.getData("type") == "speedup") {
-             console.log("collided with speedup");
-             events.emit("powerup-collided");
-             this.powerupSound.play();
-             spriteB.destroy();
-             this.speedPowerUpActive = true;
-             setTimeout(() => {
-               this.speedPowerUpActive = false;
-               events.emit("powerup-expired");
+            }
+
+            if (spriteB?.getData("type") == "speedup") {
+              console.log("collided with speedup");
+              events.emit("powerup-collided");
+              this.powerupSound.play();
+              spriteB.destroy();
+              this.speedPowerUpActive = true;
+              setTimeout(() => {
+                this.speedPowerUpActive = false;
+                events.emit("powerup-expired");
               }, 5000);
            }
            if (spriteA?.getData("type") == "meteor") {
@@ -176,13 +172,12 @@ export default class Game extends Phaser.Scene {
      }
    });
 
-
-   // Sounds are loaded into memory here
-   this.powerupSound = this.sound.add("powerup");
-   this.explosionSound = this.sound.add("explosion");
-   this.laserSound = this.sound.add("laser");
-   this.backgroundMusic = this.sound.add("pulsar");
- }
+    // Sounds are loaded into memory here
+    this.powerupSound = this.sound.add("powerup");
+    this.explosionSound = this.sound.add("explosion");
+    this.laserSound = this.sound.add("laser");
+    this.backgroundMusic = this.sound.add("pulsar");
+  }
 
 
  update() {
