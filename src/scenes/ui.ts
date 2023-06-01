@@ -24,6 +24,7 @@ export default class UI extends Phaser.Scene {
   private gameFinished = false;
 
   private shieldSound!: Phaser.Sound.BaseSound;
+  private shieldSoundPlayed = false;
 
   constructor() {
     super("ui");
@@ -106,7 +107,6 @@ export default class UI extends Phaser.Scene {
       this.powerupsCollected++;
       this.powerupsLabel.text = "PowerUps: ";
       this.shieldPowerupsCollected++;
-      this.shieldSound.play()
     });
 
     events.on("shield-expired", () => {
