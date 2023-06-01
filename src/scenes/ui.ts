@@ -60,15 +60,30 @@ export default class UI extends Phaser.Scene {
     //player gains a power up
     events.on("powerup-collided", () => {
       this.powerupsCollected++;
-      //  this.powerupsLabel.text = "PowerUps: " + this.powerupsCollected;
       this.powerupsLabel.text = "PowerUps: ";
       this.speedPowerupsCollected++;
+      const speedPowerup = this.matter.add.sprite(
+        210,
+        25,
+        "space",
+        "Power-ups/powerupYellow_bolt.png",
+        {
+          isStatic: true,
+          isSensor: true,
+        }
+      );
+      speedPowerup.setData("type", "speedPowerup");
+
+      setTimeout(() => {
+        speedPowerup.destroy();
+        this.speedPowerupsCollected--;
+      }, 5000);
     });
 
     //player's power up expires
     events.on("powerup-expired", () => {
       this.powerupsCollected--;
-      this.powerupsLabel.text = "PowerUps: " + this.powerupsCollected;
+      this.powerupsLabel.text = "PowerUps: ";
     });
 
     //player gains a shield
@@ -123,22 +138,21 @@ export default class UI extends Phaser.Scene {
     }
 
     if (this.speedPowerupsCollected > 0) {
-      const speedPowerup = this.matter.add.sprite(
-        210,
-        25,
-        "space",
-        "Power-ups/powerupYellow_bolt.png",
-        {
-          isStatic: true,
-          isSensor: true,
-        }
-      );
-      speedPowerup.setData("type", "speedPowerup");
-
-      setTimeout(() => {
-        speedPowerup.destroy();
-        this.speedPowerupsCollected--;
-      }, 2000);
+      // const speedPowerup = this.matter.add.sprite(
+      //   210,
+      //   25,
+      //   "space",
+      //   "Power-ups/powerupYellow_bolt.png",
+      //   {
+      //     isStatic: true,
+      //     isSensor: true,
+      //   }
+      // );
+      // speedPowerup.setData("type", "speedPowerup");
+      // setTimeout(() => {
+      //   speedPowerup.destroy();
+      //   this.speedPowerupsCollected--;
+      // }, 2000);
     }
 
     if (this.shieldPowerupsCollected > 0) {
