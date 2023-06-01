@@ -10,15 +10,23 @@ export default class GameOver extends Phaser.Scene {
 
   init() {}
 
-  preload() {}
+  preload() {
+    this.load.audio("gameoversound", ["assets/sounds/gameover.mp3"]);
+  }
 
   create() {
     events.on("gameover", () => {
-      this.add.text(600, 480, "Game Over!", {
+      this.gameOverSound = this.sound.add("gameoversound");
+
+      this.gameOverSound.play();
+      this.add.text(600, 480, "Game Over", {
         fontSize: "80px",
         color: "red",
       });
+      this.game.scene.remove("game");
     });
+
+    this.gameOverSound = this.sound.add("gameoversound");
   }
 
   update() {}

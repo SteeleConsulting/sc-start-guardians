@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter";
 
-
 export default class UI extends Phaser.Scene {
   //PowerUps
   private powerupsLabel!: Phaser.GameObjects.Text;
@@ -9,7 +8,7 @@ export default class UI extends Phaser.Scene {
   private speedPowerupsCollected: number = 0;
   private shieldPowerupsCollected: number = 0;
 
-  //Levels 
+  //Levels
   private levelsLabel!: Phaser.GameObjects.Text;
   private level: number = 1;
 
@@ -21,17 +20,18 @@ export default class UI extends Phaser.Scene {
   private livesLabel!: Phaser.GameObjects.Text;
   private lives: number = 3;
 
+  //Gameover
+  private gameFinished = false;
+
+  private backgroundMusic!: Phaser.Sound.BaseSound;
+
   constructor() {
     super("ui");
   }
 
+  init() {}
 
-  init() { }
-
-
-  preload() {
-    this.load.audio("gameover", ["gameover.mp3"]);
-  }
+  preload() {}
 
   create() {
     // add a text label to the screen
@@ -113,18 +113,11 @@ export default class UI extends Phaser.Scene {
     events.on("level-up", () => {
       this.level++;
       this.levelsLabel.text = "Level: " + this.level;
-    })
-
-    this.gameoverSound = this.sound.add("gameover");
-    //score threshold reached to level up
-    events.on("level-up", () => {
-      this.level++;
-      this.levelsLabel.text = "Level: " + this.level;
     });
   }
 
   update() {
-    if (this.lives == 0) {
+    if (this.lives == 0 && !this.gameFinished) {
       events.emit("gameover");
       this.gameFinished = true;
     }
@@ -141,6 +134,30 @@ export default class UI extends Phaser.Scene {
         }
       );
       speedPowerup.setData("type", "speedPowerup");
+
+      setTimeout(() => {
+        speedPowerup.destroy();
+        this.speedPowerupsCollected--;
+      }, 2000);
+    }
+
+    if (this.shieldPowerupsCollected > 0) {
+      const shieldPowerup = this.matter.add.sprite(
+        250,
+        25,
+        "space",
+        "Power-ups/powerupBlue_shield.png",
+        {
+          isStatic: true,
+          isSensor: true,
+        }
+      );
+      shieldPowerup.setData("type", "shieldPowerup");
+
+      setTimeout(() => {
+        shieldPowerup.destroy();
+        this.shieldPowerupsCollected--;
+      }, 1000);
     }
   }
 }
