@@ -137,6 +137,24 @@ export default class UI extends Phaser.Scene {
       this.levelsLabel.text = "Level: ";
       this.scene.start("leveltitlescreen");
     });
+
+    //laser power up badge
+    events.on("laser-powerup", () => {
+      const laserPowerup = this.matter.add.sprite(
+        290,
+        25,
+        "space",
+        "Power-ups/powerupGreen_star.png",
+        {
+          isStatic: true,
+          isSensor: true,
+        }
+      );
+      laserPowerup.setData("type", "laserPowerup");
+      setTimeout(() => {
+        laserPowerup.destroy();
+      }, 5000);
+    });
   }
 
   update() {

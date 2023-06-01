@@ -5,7 +5,7 @@ export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private spaceship?: Phaser.Physics.Matter.Sprite;
   private upgraded: boolean = false;
-  private helperPowerupActive = false;
+  private laserPowerupActive = false;
 
   private speed = 3;
   private normalSpeed = 3;
@@ -144,9 +144,15 @@ export default class Game extends Phaser.Scene {
               spriteB.destroy();
             }
             if (spriteB?.getData("type") == "helper") {
-              this.helperPowerupActive == true;
+              console.log("Collided with laser powerup");
+              events.emit("laser-powerup");
+              this.laserPowerupActive = true;
               spriteB.destroy();
-              // helper1 = this.spawnHelpers();
+
+              setTimeout(() => {
+                this.laserPowerupActive = false;
+                console.log("laser powerup expired");
+              }, 5000);
             }
           });
           break;
@@ -348,14 +354,25 @@ export default class Game extends Phaser.Scene {
     ySpeed: number,
     radians: number = 0
   ) {
-    var laser = this.matter.add.sprite(
-      x,
-      y,
-      "space",
-      "Lasers/laserGreen08.png",
-      { isSensor: true }
-    );
-    laser.setVelocityY(ySpeed);
+    if (this.laserPowerupActive == false) {
+      var laser = this.matter.add.sprite(
+        x,
+        y,
+        "space",
+        "Lasers/laserRed01.png",
+        { isSensor: true }
+      );
+      laser.setVelocityY(ySpeed);
+    } else {
+      var laser = this.matter.add.sprite(
+        x,
+        y,
+        "space",
+        "Lasers/laserGreen08.png",
+        { isSensor: true }
+      );
+      laser.setVelocityY(ySpeed);
+    }
     this.upgraded;
     laser.setData("type", "laser");
     laser.setOnCollide((data: MatterJS.ICollisionPair) => {
