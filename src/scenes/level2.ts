@@ -174,7 +174,7 @@ export default class Level2 extends Phaser.Scene {
     this.laserSound = this.sound.add("laser");
     this.backgroundMusic = this.sound.add("pulsar");
 
-    this.backgroundMusic.play()
+    this.backgroundMusic.play();
   }
 
   update() {
@@ -325,13 +325,13 @@ export default class Level2 extends Phaser.Scene {
 
       if (!spriteA?.getData || !spriteB?.getData) return;
 
-      if (spriteA?.getData("type") == "meteor") {
+      if (spriteA?.getData("type") == "enemy") {
         this.createEnemyAnimations();
         console.log("laser collided with enemy");
         spriteA.destroy();
         spriteB.destroy();
         this.explosionSound.play();
-        events.emit("asteroid-destroyed");
+        events.emit("enemy-killed");
       }
     });
 

@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter";
 
 export default class StartScreen extends Phaser.Scene {
-  private titleScreenMusic!: Phaser.Sound.BaseSound
+  private titleScreenMusic!: Phaser.Sound.BaseSound;
 
   constructor() {
     super("startscreen");
@@ -11,7 +11,7 @@ export default class StartScreen extends Phaser.Scene {
   init() {}
 
   preload() {
-    this.load.audio("neon", ["assets/sounds/neon-sky.mp3"])
+    this.load.audio("neon", ["assets/sounds/neon-sky.mp3"]);
   }
 
   create() {
@@ -34,6 +34,6 @@ export default class StartScreen extends Phaser.Scene {
 
   startScene() {
     this.scene.start("game");
-    this.scene.remove();
+    this.game.scene.remove("startscreen");
   }
 }
