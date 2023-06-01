@@ -142,11 +142,13 @@ export default class Game extends Phaser.Scene {
       this.spaceship.setVelocityX(-this.speed);
       if (this.spaceship.x < 50) this.spaceship.setX(50); // left boundry
       this.spaceship.flipX = true;
-    } else if (this.cursors.right.isDown) {
+    } 
+    else if (this.cursors.right.isDown) {
       this.spaceship.setVelocityX(this.speed);
       if (this.spaceship.x > 1550) this.spaceship.setX(1550); // right boundry
       this.spaceship.flipX = false;
-    } else {
+    } 
+    else {
       this.spaceship.setVelocityX(0);
     }
 
