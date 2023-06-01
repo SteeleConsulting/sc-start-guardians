@@ -5,6 +5,7 @@ export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private spaceship?: Phaser.Physics.Matter.Sprite;
   private upgraded: boolean = false;
+  private laserPowerupActive = false;
 
   private speed = 3;
   private normalSpeed = 3;
@@ -141,7 +142,22 @@ export default class Game extends Phaser.Scene {
             ) {
               spriteB.destroy();
               events.emit("life-lost");
-              this.createSpaceshipAnimations();
+            } else if (
+              spriteB?.getData("type") == "meteor" &&
+              this.shieldPowerupActive == true
+            ) {
+              spriteB.destroy();
+            }
+            if (spriteB?.getData("type") == "helper") {
+              console.log("Collided with laser powerup");
+              events.emit("laser-powerup");
+              this.laserPowerupActive = true;
+              spriteB.destroy();
+
+              setTimeout(() => {
+                this.laserPowerupActive = false;
+                console.log("laser powerup expired");
+              }, 5000);
             }
           });
           break;
@@ -174,6 +190,19 @@ export default class Game extends Phaser.Scene {
           );
           powerup.setBounce(1);
           powerup.setData("type", "shield");
+
+          const helperPowerup = this.matter.add.sprite(
+            x + Math.floor(Math.random() * 701),
+            y,
+            "space",
+            "Power-ups/powerupGreen_star.png",
+            {
+              isStatic: true,
+              isSensor: true,
+            }
+          );
+          helperPowerup.setBounce(1);
+          helperPowerup.setData("type", "helper");
           break;
 
         case "asteroid":
@@ -236,6 +265,7 @@ export default class Game extends Phaser.Scene {
       this.speedPowerUpActive == true
         ? this.spaceship.setVelocityX(-this.powerUpSpeed)
         : this.spaceship.setVelocityX(-this.speed);
+
       if (this.spaceship.x < 50) this.spaceship.setX(50); // left boundary
       this.spaceship.flipX = false;
     } else if (this.cursors.right.isDown) {
@@ -273,6 +303,19 @@ export default class Game extends Phaser.Scene {
 
       this.sound.play("laser");
     }
+  }
+  spawnHelpers() {
+    var helper = this.matter.add.sprite(
+      this.spaceship!.x + 80,
+      this.spaceship!.y,
+      "space",
+      "UI/playerLife3_red.png",
+      {
+        isSensor: true,
+      }
+    );
+    this.upgraded;
+    helper.setData("type", "helper");
   }
 
   createShield(x, y) {
@@ -316,14 +359,25 @@ export default class Game extends Phaser.Scene {
     ySpeed: number,
     radians: number = 0
   ) {
-    var laser = this.matter.add.sprite(
-      x,
-      y,
-      "space",
-      "Lasers/laserGreen08.png",
-      { isSensor: true }
-    );
-    laser.setVelocityY(ySpeed);
+    if (this.laserPowerupActive == false) {
+      var laser = this.matter.add.sprite(
+        x,
+        y,
+        "space",
+        "Lasers/laserRed01.png",
+        { isSensor: true }
+      );
+      laser.setVelocityY(ySpeed);
+    } else {
+      var laser = this.matter.add.sprite(
+        x,
+        y,
+        "space",
+        "Lasers/laserGreen08.png",
+        { isSensor: true }
+      );
+      laser.setVelocityY(ySpeed);
+    }
     this.upgraded;
     laser.setData("type", "laser");
     laser.setOnCollide((data: MatterJS.ICollisionPair) => {
@@ -335,10 +389,13 @@ export default class Game extends Phaser.Scene {
       if (!spriteA?.getData || !spriteB?.getData) return;
 
       if (spriteA?.getData("type") == "meteor") {
-        this.createEnemyAnimations();
         console.log("laser collided with enemy");
-        spriteA.destroy();
+        spriteA.play("enemy-explode");
         spriteB.destroy();
+        setTimeout(() => {
+          spriteA.destroy();
+        }, 500);
+
         this.explosionSound.play();
         events.emit("asteroid-destroyed");
       }
@@ -346,21 +403,6 @@ export default class Game extends Phaser.Scene {
 
     // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
     setTimeout((laser) => laser.destroy(), 3000, laser);
-  }
-
-  private spawnEnemy(x, y) {
-    const meteor = this.matter.add.sprite(
-      x,
-      y,
-      "space",
-      "Meteors/meteorBrown_big1.png",
-      {
-        isStatic: true,
-        isSensor: true,
-      }
-    );
-    meteor.setBounce(1);
-    meteor.setData("type", "meteor");
   }
 
   private createSpaceshipAnimations() {
@@ -389,6 +431,18 @@ export default class Game extends Phaser.Scene {
 
     this.anims.create({
       key: "enemy-explode",
+      frameRate: 15,
+      frames: this.anims.generateFrameNames("explosion", {
+        start: 1,
+        end: 16,
+        prefix: "explosion",
+        suffix: ".png",
+      }),
+      repeat: 1,
+    });
+
+    this.anims.create({
+      key: "asteroid-explode",
       frameRate: 15,
       frames: this.anims.generateFrameNames("explosion", {
         start: 1,
