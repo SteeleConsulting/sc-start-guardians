@@ -15,6 +15,7 @@ export default class Game extends Phaser.Scene {
 
   private laserSound!: Phaser.Sound.BaseSound;
   private explosionSound!: Phaser.Sound.BaseSound;
+  private backgroundMusic!: Phaser.Sound.BaseSound;
   private powerupSound!: Phaser.Sound.BaseSound;
   private MarioSound!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
@@ -192,7 +193,9 @@ export default class Game extends Phaser.Scene {
     this.powerupSound = this.sound.add("powerup");
     this.explosionSound = this.sound.add("explosion");
     this.laserSound = this.sound.add("laser");
-    // this.backgroundMusic = this.sound.add("pulsar");
+    this.backgroundMusic = this.sound.add("pulsar");
+
+    // this.backgroundMusic.play()
   }
 
   update() {
@@ -210,7 +213,7 @@ export default class Game extends Phaser.Scene {
         isSensor: true,
       }
     );
-    beam.flipY = true;
+    beam.flipY = false;
     setTimeout(() => {
       beam.destroy();
     }, 100);
@@ -220,7 +223,7 @@ export default class Game extends Phaser.Scene {
     this.spaceship.setVelocityY(-this.normalSpeed);
     if (this.cameras.main.scrollY < 0) {
       // this.scene.start("level2");
-      this.scene.start("leveltitlescreen");
+      events.emit("level-up");
     }
 
     // handle keyboard input

@@ -31,7 +31,16 @@ export default class UI extends Phaser.Scene {
 
   init() {}
 
-  preload() {}
+  preload() {
+    this.load.atlas(
+      "space",
+      "assets/space-shooter/space-shooter-tileset.png",
+      "assets/space-shooter/space-shooter-tileset.json"
+    );
+    this.load.image("level1", "UI/numeral1.png");
+    this.load.image("level2", "UI/numeral2png");
+    this.load.image("level3", "UI/numeral3.png");
+  }
 
   create() {
     // add a text label to the screen
@@ -40,7 +49,7 @@ export default class UI extends Phaser.Scene {
       color: "white",
     });
 
-    this.levelsLabel = this.add.text(10, 50, "Level: 1", {
+    this.levelsLabel = this.add.text(10, 50, "Level: ", {
       fontSize: "32px",
       color: "white",
     });
@@ -89,14 +98,12 @@ export default class UI extends Phaser.Scene {
     //player gains a shield
     events.on("shield-collided", () => {
       this.powerupsCollected++;
-      //  this.powerupsLabel.text = "PowerUps: " + this.powerupsCollected;
       this.powerupsLabel.text = "PowerUps: ";
       this.shieldPowerupsCollected++;
     });
 
     events.on("shield-expired", () => {
       this.powerupsCollected--;
-      //  this.powerupsLabel.text = "PowerUps: " + this.powerupsCollected;
       this.shieldPowerupsCollected--;
     });
 
@@ -127,7 +134,8 @@ export default class UI extends Phaser.Scene {
     //score threshold reached to level up
     events.on("level-up", () => {
       this.level++;
-      this.levelsLabel.text = "Level: " + this.level;
+      this.levelsLabel.text = "Level: ";
+      this.scene.start("leveltitlescreen");
     });
   }
 
@@ -137,29 +145,53 @@ export default class UI extends Phaser.Scene {
       this.gameFinished = true;
     }
 
-    if (this.speedPowerupsCollected > 0) {
-      // const speedPowerup = this.matter.add.sprite(
-      //   210,
-      //   25,
-      //   "space",
-      //   "Power-ups/powerupYellow_bolt.png",
-      //   {
-      //     isStatic: true,
-      //     isSensor: true,
-      //   }
-      // );
-      // speedPowerup.setData("type", "speedPowerup");
-      // setTimeout(() => {
-      //   speedPowerup.destroy();
-      //   this.speedPowerupsCollected--;
-      // }, 2000);
+    switch (this.level) {
+      case 1:
+        const level1Image = this.matter.add.sprite(
+          150, 65,
+          "space",
+          "UI/numeral1.png",
+          {
+            isStatic: true,
+            isSensor: true,
+          }
+        );
+        level1Image.setData("type", "level1");
+        break;
+      case 2:
+        const level2Image = this.matter.add.sprite(
+          150, 65,
+          "space",
+          "UI/numeral2.png",
+          {
+            isStatic: true,
+            isSensor: true,
+          }
+        );
+        level2Image.setData("type", "level2");
+        break;
+      case 3:
+        const level3Image = this.matter.add.sprite(
+          150, 65,
+          "space",
+          "UI/numeral3.png",
+          {
+            isStatic: true,
+            isSensor: true,
+          }
+        );
+        level3Image.setData("type", "level3");
+        break;
+
+      default:
+        break;
     }
 
     if (this.shieldPowerupsCollected > 0) {
       const shieldPowerup = this.matter.add.sprite(
         250,
         25,
-        "space",
+        'space',
         "Power-ups/powerupBlue_shield.png",
         {
           isStatic: true,

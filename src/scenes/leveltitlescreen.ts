@@ -15,8 +15,8 @@ export default class LevelTitleScreen extends Phaser.Scene {
   }
 
   create() {
-    // this.levelUpSound = this.sound.add("LevelUpSound");
-    // this.levelUpSound.play();
+    this.levelUpSound = this.sound.add("levelup");
+    this.levelUpSound.play();
 
     console.log("Got to the level title screen");
     this.add.text(600, 480, "Level 2", {

@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter";
 
 export default class StartScreen extends Phaser.Scene {
-  //   private gameOverSound!: Phaser.Sound.BaseSound;
+  private titleScreenMusic!: Phaser.Sound.BaseSound
 
   constructor() {
     super("startscreen");
@@ -10,7 +10,9 @@ export default class StartScreen extends Phaser.Scene {
 
   init() {}
 
-  preload() {}
+  preload() {
+    this.load.audio("neon", ["assets/sounds/neon-sky.mp3"])
+  }
 
   create() {
     this.add.text(380, 480, "Guardians of the Galaxy", {
@@ -22,11 +24,16 @@ export default class StartScreen extends Phaser.Scene {
       color: "white",
     });
     this.input.keyboard.on("keydown-SPACE", this.startScene, this);
+
+    //loading music here
+    // this.titleScreenMusic = this.sound.add("neon")
+    // this.titleScreenMusic.play()
   }
 
   update() {}
 
   startScene() {
     this.scene.start("game");
+    this.scene.remove();
   }
 }

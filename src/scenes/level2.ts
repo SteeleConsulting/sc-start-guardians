@@ -173,6 +173,8 @@ export default class Level2 extends Phaser.Scene {
     this.explosionSound = this.sound.add("explosion");
     this.laserSound = this.sound.add("laser");
     this.backgroundMusic = this.sound.add("pulsar");
+
+    this.backgroundMusic.play()
   }
 
   update() {
