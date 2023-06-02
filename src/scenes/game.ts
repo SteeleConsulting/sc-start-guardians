@@ -1,8 +1,6 @@
 import Phaser from "phaser";
 import { sharedInstance as events } from "../helpers/eventCenter"; // this is the shared events emitter
 
-
-
 export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private spaceship?: Phaser.Physics.Matter.Sprite;
@@ -24,7 +22,6 @@ export default class Game extends Phaser.Scene {
   private shieldBrokenSound!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
-
 
   constructor() {
     super("game");
@@ -82,6 +79,8 @@ export default class Game extends Phaser.Scene {
     // load tilemap with object locations
     const map = this.make.tilemap({ key: "spacemap" });
     const objectsLayer = map.getObjectLayer("objects");
+    console.log(map);
+
     objectsLayer.objects.forEach((obj) => {
       const { x = 0, y = 0, name } = obj; // get the coordinates and name of the object from the tile map
       // console.log(
@@ -228,7 +227,6 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
-
     if (!this.spaceship?.active)
       // This checks if the spaceship has been created yet
       return;
@@ -253,7 +251,7 @@ export default class Game extends Phaser.Scene {
     this.spaceship.setVelocityY(-this.normalSpeed);
     if (this.cameras.main.scrollY < 0) {
       // this.scene.start("level2");
-      this.backgroundMusic.pause()
+      this.backgroundMusic.pause();
       events.emit("level-up");
     }
 

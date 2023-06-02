@@ -141,6 +141,17 @@ export default class Level2 extends Phaser.Scene {
               spriteB.destroy();
               events.emit("life-lost");
             }
+            if (spriteB?.getData("type") == "helper") {
+              console.log("Collided with laser powerup");
+              events.emit("laser-powerup");
+              this.laserPowerupActive = true;
+              spriteB.destroy();
+
+              setTimeout(() => {
+                this.laserPowerupActive = false;
+                console.log("laser powerup expired");
+              }, 5000);
+            }
           });
           break;
         case "speedup":
@@ -171,6 +182,19 @@ export default class Level2 extends Phaser.Scene {
           );
           powerup.setBounce(1);
           powerup.setData("type", "shield");
+          const helperPowerup = this.matter.add.sprite(
+            x + Math.floor(Math.random() * 701),
+            y,
+            "space",
+            "Power-ups/powerupGreen_star.png",
+            {
+              isStatic: true,
+              isSensor: true,
+            }
+          );
+          helperPowerup.setBounce(1);
+          helperPowerup.setData("type", "helper");
+
           break;
         case "enemy":
           this.createEnemy(x + Math.floor(Math.random() * 701), y, -this.speed);
