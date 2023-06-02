@@ -35,9 +35,6 @@ export default class UI extends Phaser.Scene {
       "assets/space-shooter/space-shooter-tileset.png",
       "assets/space-shooter/space-shooter-tileset.json"
     );
-    // this.load.image("level1", "UI/numeral1.png");
-    // this.load.image("level2", "UI/numeral2png");
-    // this.load.image("level3", "UI/numeral3.png");
 
     this.load.audio("shield", ["assets/sounds/shield.mp3"]);
   }
@@ -134,16 +131,13 @@ export default class UI extends Phaser.Scene {
 
     // reached to level up
     events.on("level-up", () => {
-      this.level++;
-      // this.levelsLabel.text = "Level: " + this.level;
+      this.level = 2;
       this.scene.start("leveltitlescreen");
     });
 
     //  reaches boss level
     events.on("bosslevel-up", () => {
-      console.log("Made it to the UI event");
-      // this.level++;
-      this.levelsLabel.text = "Level: " + this.level;
+      this.level = 3;
       this.scene.start("bosstitlescreen");
     });
 
