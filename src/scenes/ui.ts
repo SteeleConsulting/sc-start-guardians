@@ -40,7 +40,6 @@ export default class UI extends Phaser.Scene {
   }
 
   create() {
-
     // add a text label to the screen
     this.powerupsLabel = this.add.text(10, 10, "PowerUps: ", {
       fontSize: "32px",
@@ -132,6 +131,7 @@ export default class UI extends Phaser.Scene {
     // reached to level up
     events.on("level-up", () => {
       this.level = 2;
+      this.shieldPowerupsCollected = 0;
       this.scene.start("leveltitlescreen");
     });
 
@@ -158,7 +158,6 @@ export default class UI extends Phaser.Scene {
         laserPowerup.destroy();
       }, 5000);
     });
-
   }
 
   update() {
@@ -185,6 +184,5 @@ export default class UI extends Phaser.Scene {
         this.shieldPowerupsCollected--;
       }, 100);
     }
-
   }
 }
