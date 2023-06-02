@@ -406,7 +406,7 @@ export default class Level3 extends Phaser.Scene {
 
         if (spriteA?.getData("type") == "boss") {
           console.log("laser collided with boss");
-          // spriteA.destroy();
+          spriteB.destroy();
           this.bossLifes--;
           this.explosionSound.play();
           events.emit("asteroid-destroyed");
@@ -449,6 +449,12 @@ export default class Level3 extends Phaser.Scene {
       setTimeout(() => laser2.destroy(), 3000);
     }
     console.log(this.bossLifes);
+    if (this.bossLifes < 1) {
+      this.boss?.play("spaceship-explode");
+      setTimeout(() => {
+        this.boss?.destroy();
+      }, 2000);
+    }
   }
 
   private createSpaceshipAnimations() {
