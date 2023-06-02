@@ -340,7 +340,6 @@ export default class Game extends Phaser.Scene {
         console.log("shield collided with enemy");
         spriteA.destroy();
         spriteB.destroy();
-        this.shieldPowerupActive = false;
         this.explosionSound.play();
         events.emit("shield-expired");
         events.emit("asteroid-destroyed");
@@ -377,19 +376,16 @@ export default class Game extends Phaser.Scene {
 
         if (spriteA?.getData("type") == "meteor") {
           console.log("laser collided with enemy");
-          spriteA.play("enemy-explode");
+          spriteA.destroy();
           spriteB.destroy();
-          setTimeout(() => {
-            spriteA.destroy();
-          }, 500);
 
           this.explosionSound.play();
           events.emit("asteroid-destroyed");
         }
       });
-
-      // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout(() => laser.destroy(), 500);
+      setTimeout(() => {
+        laser.destroy();
+      }, 1000);
     } else {
       var laser = this.matter.add.sprite(
         x - 10,
@@ -411,10 +407,7 @@ export default class Game extends Phaser.Scene {
 
         if (spriteA?.getData("type") == "meteor") {
           console.log("laser collided with enemy");
-          spriteA.play("enemy-explode");
-          setTimeout(() => {
-            spriteA.destroy();
-          }, 500);
+          spriteA.destroy();
 
           this.explosionSound.play();
           events.emit("asteroid-destroyed");
@@ -422,7 +415,7 @@ export default class Game extends Phaser.Scene {
       });
 
       // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout(() => laser.destroy(), 500);
+      setTimeout(() => laser.destroy(), 3000);
 
       var laser2 = this.matter.add.sprite(
         x + 10,
@@ -444,10 +437,7 @@ export default class Game extends Phaser.Scene {
 
         if (spriteA?.getData("type") == "meteor") {
           console.log("laser collided with enemy");
-          spriteA.play("enemy-explode");
-          setTimeout(() => {
-            spriteA.destroy();
-          }, 500);
+          spriteA.destroy();
 
           this.explosionSound.play();
           events.emit("asteroid-destroyed");
@@ -455,7 +445,7 @@ export default class Game extends Phaser.Scene {
       });
 
       // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout(() => laser2.destroy(), 500);
+      setTimeout(() => laser2.destroy(), 3000);
     }
   }
 

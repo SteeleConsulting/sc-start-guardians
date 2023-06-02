@@ -4,7 +4,7 @@ import level from "./ui";
 
 export default class BossTitleScreen extends Phaser.Scene {
   private levelUpSound!: Phaser.Sound.BaseSound;
-  
+
   constructor() {
     super("bosstitlescreen");
   }
@@ -25,16 +25,12 @@ export default class BossTitleScreen extends Phaser.Scene {
       color: "white",
     });
     this.add.text(540, 920, "Boss level", {
-        fontSize: "30px",
-        color: "white",
-      });
-
-    setTimeout(() => {
-        this.scene.start("level3");
-        this.game.scene.remove("bosstitlescreen");
-        this.game.scene.remove("level2");
-    }, 1000);
-
+      fontSize: "30px",
+      color: "white",
+    });
+    this.scene.start("level3");
+    this.game.scene.remove("bosstitlescreen");
+    this.game.scene.remove("level2");
   }
 
   update() {}
