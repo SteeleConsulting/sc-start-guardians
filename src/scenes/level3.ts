@@ -20,6 +20,8 @@ export default class Level3 extends Phaser.Scene {
   private backgroundMusic!: Phaser.Sound.BaseSound;
   private powerupSound!: Phaser.Sound.BaseSound;
   private MarioSound!: Phaser.Sound.BaseSound;
+  private bossLaugh!: Phaser.Sound.BaseSound;
+  private finisher!: Phaser.Sound.BaseSound;
   private shieldBrokenSound!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
@@ -62,6 +64,8 @@ export default class Level3 extends Phaser.Scene {
     this.load.audio("wifi", ["assets/sounds/mariowifi.mp3"]);
     this.load.audio("mario", ["assets/sounds/SuperMarioBros-Star.mp3"]);
     this.load.audio("shieldBroken", ["assets/sounds/cracked-shield.mp3"]);
+    this.load.audio("laugh", ["assets/sounds/masterlaugh.mp3"]);
+    this.load.audio("finish", ["assets/sounds/finishhim.mp3"]);
   }
 
   create() {
@@ -201,6 +205,7 @@ export default class Level3 extends Phaser.Scene {
           helperPowerup.setBounce(1);
           helperPowerup.setData("type", "helper");
           break;
+
         case "boss":
           this.boss = this.matter.add.sprite(
             this.spaceship!.x,
@@ -217,9 +222,22 @@ export default class Level3 extends Phaser.Scene {
     this.powerupSound = this.sound.add("powerup");
     this.explosionSound = this.sound.add("explosion");
     this.laserSound = this.sound.add("laser");
-    this.backgroundMusic = this.sound.add("wifi");
+    this.backgroundMusic = this.sound.add("bowser");
+    this.bossLaugh = this.sound.add("laugh");
+    this.finisher = this.sound.add("finish");
 
     this.backgroundMusic.play();
+    
+
+
+    events.on("gameover", () => {
+      console.log("game ended.ts")
+      this.sound.stopByKey("bowser")
+      this.game.scene.remove("game");
+      this.game.scene.remove("level2");
+      this.game.scene.remove("level3");
+    })
+
   }
 
   update() {

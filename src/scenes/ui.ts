@@ -165,10 +165,13 @@ export default class UI extends Phaser.Scene {
       }, 5000);
     });
 
+    
+
   }
 
   update() {
     if (this.lives == 0 && !this.gameFinished) {
+      console.log("inside if")
       events.emit("gameover");
       this.gameFinished = true;
     }

@@ -225,6 +225,14 @@ export default class Game extends Phaser.Scene {
     this.backgroundMusic = this.sound.add("wifi");
 
     this.backgroundMusic.play();
+
+    events.on("gameover", () => {
+      console.log("game ended.ts")
+      this.sound.stopByKey("wifi");
+      this.game.scene.remove("game");
+      this.game.scene.remove("level2");
+      this.game.scene.remove("level3");
+    })
   }
 
   update() {
