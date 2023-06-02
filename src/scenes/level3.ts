@@ -210,6 +210,13 @@ export default class Level3 extends Phaser.Scene {
           this.boss.setVelocityY(-this.normalSpeed);
           this.boss.setData("type", "boss");
           this.bossLifes = 50;
+
+          setTimeout(() => {
+            this.boss?.setVelocityX(Math.floor(Math.random() * 5));
+          }, 2000);
+          setTimeout(() => {
+            this.boss?.setVelocityX(-Math.floor(Math.random() * 10));
+          }, 4000);
           break;
       }
     });
