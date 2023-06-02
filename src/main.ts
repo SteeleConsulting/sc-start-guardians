@@ -7,6 +7,7 @@ import Level2 from "./scenes/level2";
 import Level3 from "./scenes/level3";
 import LevelTitleScreen from "./scenes/leveltitlescreen";
 import BossTitleScreen from "./scenes/bosstitlescreen";
+// import GameComplete from "./scenes/gamecomplete";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -30,6 +31,7 @@ const config: Phaser.Types.Core.GameConfig = {
     GameOver,
     LevelTitleScreen,
     BossTitleScreen,
+    // GameComplete
   ], // this is the list of scenes to be used in the game, only the first scene is auto launched
 };
 

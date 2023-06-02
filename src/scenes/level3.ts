@@ -201,6 +201,7 @@ export default class Level3 extends Phaser.Scene {
           helperPowerup.setBounce(1);
           helperPowerup.setData("type", "helper");
           break;
+
         case "boss":
           this.boss = this.matter.add.sprite(
             this.spaceship!.x,

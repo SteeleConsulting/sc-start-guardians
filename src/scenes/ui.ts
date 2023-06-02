@@ -35,9 +35,9 @@ export default class UI extends Phaser.Scene {
       "assets/space-shooter/space-shooter-tileset.png",
       "assets/space-shooter/space-shooter-tileset.json"
     );
-    this.load.image("level1", "UI/numeral1.png");
-    this.load.image("level2", "UI/numeral2png");
-    this.load.image("level3", "UI/numeral3.png");
+    // this.load.image("level1", "UI/numeral1.png");
+    // this.load.image("level2", "UI/numeral2png");
+    // this.load.image("level3", "UI/numeral3.png");
 
     this.load.audio("shield", ["assets/sounds/shield.mp3"]);
   }
@@ -50,7 +50,7 @@ export default class UI extends Phaser.Scene {
       color: "white",
     });
 
-    this.levelsLabel = this.add.text(10, 50, "Level: ", {
+    this.levelsLabel = this.add.text(10, 50, "Level: " + this.level, {
       fontSize: "32px",
       color: "white",
     });
@@ -135,7 +135,7 @@ export default class UI extends Phaser.Scene {
     // reached to level up
     events.on("level-up", () => {
       this.level++;
-      this.levelsLabel.text = "Level: ";
+      this.levelsLabel.text = "Level: " + this.level;
       this.scene.start("leveltitlescreen");
     });
 
@@ -143,7 +143,7 @@ export default class UI extends Phaser.Scene {
     events.on("bosslevel-up", () => {
       console.log("Made it to the UI event");
       this.level++;
-      this.levelsLabel.text = "Level: ";
+      this.levelsLabel.text = "Level: " + this.level;
       this.scene.start("bosstitlescreen");
     });
 
@@ -176,50 +176,50 @@ export default class UI extends Phaser.Scene {
     /**
      * display level asset according to level number
      */
-    switch (this.level) {
-      case 1:
-        const level1Image = this.matter.add.sprite(
-          150,
-          68,
-          "space",
-          "UI/numeral1.png",
-          {
-            isStatic: true,
-            isSensor: true,
-          }
-        );
-        level1Image.setData("type", "level1");
-        break;
-      case 2:
-        const level2Image = this.matter.add.sprite(
-          150,
-          65,
-          "space",
-          "UI/numeral2.png",
-          {
-            isStatic: true,
-            isSensor: true,
-          }
-        );
-        level2Image.setData("type", "level2");
-        break;
-      case 3:
-        const level3Image = this.matter.add.sprite(
-          150,
-          65,
-          "space",
-          "UI/numeral3.png",
-          {
-            isStatic: true,
-            isSensor: true,
-          }
-        );
-        level3Image.setData("type", "level3");
-        break;
+    // switch (this.level) {
+    //   case 1:
+    //     const level1Image = this.matter.add.sprite(
+    //       150,
+    //       68,
+    //       "space",
+    //       "UI/numeral1.png",
+    //       {
+    //         isStatic: true,
+    //         isSensor: true,
+    //       }
+    //     );
+    //     level1Image.setData("type", "level1");
+    //     break;
+    //   case 2:
+    //     const level2Image = this.matter.add.sprite(
+    //       150,
+    //       65,
+    //       "space",
+    //       "UI/numeral2.png",
+    //       {
+    //         isStatic: true,
+    //         isSensor: true,
+    //       }
+    //     );
+    //     level2Image.setData("type", "level2");
+    //     break;
+    //   case 3:
+    //     const level3Image = this.matter.add.sprite(
+    //       150,
+    //       65,
+    //       "space",
+    //       "UI/numeral3.png",
+    //       {
+    //         isStatic: true,
+    //         isSensor: true,
+    //       }
+    //     );
+    //     level3Image.setData("type", "level3");
+    //     break;
 
-      default:
-        break;
-    }
+    //   default:
+    //     break;
+    // }
 
     if (this.shieldPowerupsCollected > 0) {
       const shieldPowerup = this.matter.add.sprite(
