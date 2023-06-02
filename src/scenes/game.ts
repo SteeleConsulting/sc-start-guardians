@@ -128,11 +128,11 @@ export default class Game extends Phaser.Scene {
             }
             //shield
             if (spriteB?.getData("type") == "shield") {
+              events.emit("shield-collided");
               this.shieldBrokenSound.play();
               spriteB.destroy();
-              events.emit("shield-collided");
-              this.shieldPowerupActive = true;
               this.createShield(spriteA.x, spriteA.y);
+              this.shieldPowerupActive = true;
             }
             if (
               spriteB?.getData("type") == "meteor" &&
@@ -140,11 +140,6 @@ export default class Game extends Phaser.Scene {
             ) {
               spriteB.destroy();
               events.emit("life-lost");
-            } else if (
-              spriteB?.getData("type") == "meteor" &&
-              this.shieldPowerupActive == true
-            ) {
-              spriteB.destroy();
             }
             if (spriteB?.getData("type") == "helper") {
               console.log("Collided with laser powerup");
@@ -316,7 +311,6 @@ export default class Game extends Phaser.Scene {
   }
 
   createShield(x, y) {
-    this.shieldPowerupActive = true;
     const shield = this.matter.add.sprite(
       x,
       y,
@@ -343,6 +337,7 @@ export default class Game extends Phaser.Scene {
         this.explosionSound.play();
         events.emit("shield-expired");
         events.emit("asteroid-destroyed");
+        this.shieldPowerupActive = false;
       }
     });
   }
