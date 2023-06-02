@@ -57,7 +57,7 @@ export default class Level2 extends Phaser.Scene {
     this.load.audio("laser", ["assets/sounds/laser.wav"]);
     this.load.audio("explosion", ["assets/sounds/explosion.mp3"]);
     this.load.audio("powerup", ["assets/sounds/powerup.wav"]);
-    this.load.audio("pulsar", ["assets/sounds/pulsar-office.mp3"]);
+    this.load.audio("wifi", ["assets/sounds/mariowifi.mp3"]);
     this.load.audio("mario", ["assets/sounds/SuperMarioBros-Star.mp3"]);
     this.load.audio("shieldBroken", ["assets/sounds/cracked-shield.mp3"]);
   }
@@ -182,7 +182,7 @@ export default class Level2 extends Phaser.Scene {
     this.powerupSound = this.sound.add("powerup");
     this.explosionSound = this.sound.add("explosion");
     this.laserSound = this.sound.add("laser");
-    this.backgroundMusic = this.sound.add("pulsar");
+    this.backgroundMusic = this.sound.add("wifi");
 
     this.backgroundMusic.play();
   }
@@ -212,6 +212,7 @@ export default class Level2 extends Phaser.Scene {
     this.spaceship.setVelocityY(-this.normalSpeed);
     if (this.cameras.main.scrollY < 0) {
       console.log("Made it to 2");
+      this.backgroundMusic.pause();
       events.emit("bosslevel-up");
     }
 

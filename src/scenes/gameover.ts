@@ -17,7 +17,6 @@ export default class GameOver extends Phaser.Scene {
   create() {
     events.on("gameover", () => {
       this.gameOverSound = this.sound.add("gameoversound");
-
       this.gameOverSound.play();
       this.add.text(600, 480, "Game Over", {
         fontSize: "80px",
