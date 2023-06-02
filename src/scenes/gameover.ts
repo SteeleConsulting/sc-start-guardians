@@ -24,6 +24,7 @@ export default class GameOver extends Phaser.Scene {
         color: "red",
       });
       this.game.scene.remove("game");
+      this.game.scene.remove("level2");
     });
 
     this.gameOverSound = this.sound.add("gameoversound");

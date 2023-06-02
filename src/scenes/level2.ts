@@ -362,6 +362,7 @@ export default class Level2 extends Phaser.Scene {
           spriteA.destroy();
           spriteB.destroy();
           this.explosionSound.play();
+          events.emit("enemy-killed");
         }
       });
       setTimeout(() => {
@@ -389,6 +390,7 @@ export default class Level2 extends Phaser.Scene {
         if (spriteA?.getData("type") == "enemy") {
           console.log("laser collided with enemy");
           spriteA.destroy();
+          events.emit("enemy-killed");
           this.explosionSound.play();
         }
       });
@@ -417,6 +419,7 @@ export default class Level2 extends Phaser.Scene {
         if (spriteA?.getData("type") == "enemy") {
           console.log("laser collided with enemy");
           spriteA.destroy();
+          events.emit("enemy-killed");
           this.explosionSound.play();
         }
       });

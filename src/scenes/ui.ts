@@ -18,7 +18,7 @@ export default class UI extends Phaser.Scene {
 
   //Lives
   private livesLabel!: Phaser.GameObjects.Text;
-  private lives: number = 3;
+  private lives: number = 4;
 
   //Gameover
   private gameFinished = false;
@@ -55,12 +55,12 @@ export default class UI extends Phaser.Scene {
       color: "white",
     });
 
-    this.scoreLabel = this.add.text(1400, 10, "Score: 0", {
+    this.scoreLabel = this.add.text(1400, 10, "Score: " + this.score, {
       fontSize: "32px",
       color: "white",
     });
 
-    this.livesLabel = this.add.text(1400, 50, "Lives: 3", {
+    this.livesLabel = this.add.text(1400, 50, "Lives: " + this.lives, {
       fontSize: "32px",
       color: "white",
     });
@@ -167,7 +167,7 @@ export default class UI extends Phaser.Scene {
   }
 
   update() {
-    if (this.lives == 0 && !this.gameFinished) {
+    if (this.lives <= 0 && !this.gameFinished) {
       events.emit("gameover");
       this.gameFinished = true;
     }

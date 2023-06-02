@@ -372,21 +372,21 @@ export default class Level3 extends Phaser.Scene {
 
         if (!spriteA?.getData || !spriteB?.getData) return;
 
-        if (spriteA?.getData("type") == "boss") {
-          console.log("laser collided with boss");
-
-          spriteA.setVelocityY(-this.turboSpeed);
+        if (spriteA?.getData("type") == "meteor") {
+          console.log("laser collided with enemy");
+          spriteA.destroy();
+          spriteB.destroy();
 
           this.explosionSound.play();
           events.emit("asteroid-destroyed");
         }
       });
-
-      // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout((laser) => laser.destroy(), 3000, laser);
+      setTimeout(() => {
+        laser.destroy();
+      }, 1000);
     } else {
       var laser = this.matter.add.sprite(
-        x,
+        x - 10,
         y,
         "space",
         "Lasers/laserGreen08.png",
@@ -405,12 +405,45 @@ export default class Level3 extends Phaser.Scene {
 
         if (spriteA?.getData("type") == "boss") {
           console.log("laser collided with boss");
-          spriteA.setVelocityY(-this.turboSpeed);
+          spriteA.destroy();
+
+          this.explosionSound.play();
+          events.emit("asteroid-destroyed");
         }
       });
 
       // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
-      setTimeout((laser) => laser.destroy(), 3000, laser);
+      setTimeout(() => laser.destroy(), 3000);
+
+      var laser2 = this.matter.add.sprite(
+        x + 10,
+        y,
+        "space",
+        "Lasers/laserGreen08.png",
+        { isSensor: true }
+      );
+      laser2.setVelocityY(ySpeed);
+      this.upgraded;
+      laser2.setData("type", "laser");
+      laser2.setOnCollide((data: MatterJS.ICollisionPair) => {
+        const spriteA = (data.bodyA as MatterJS.BodyType)
+          .gameObject as Phaser.Physics.Matter.Sprite;
+        const spriteB = (data.bodyB as MatterJS.BodyType)
+          .gameObject as Phaser.Physics.Matter.Sprite;
+
+        if (!spriteA?.getData || !spriteB?.getData) return;
+
+        if (spriteA?.getData("type") == "meteor") {
+          console.log("laser collided with enemy");
+          spriteA.destroy();
+
+          this.explosionSound.play();
+          events.emit("asteroid-destroyed");
+        }
+      });
+
+      // destroy laser object after 500ms, otherwise lasers stay in memory and slow down the game
+      setTimeout(() => laser2.destroy(), 3000);
     }
   }
 
