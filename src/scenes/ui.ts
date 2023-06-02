@@ -164,6 +164,7 @@ export default class UI extends Phaser.Scene {
         laserPowerup.destroy();
       }, 5000);
     });
+
   }
 
   update() {
@@ -238,5 +239,6 @@ export default class UI extends Phaser.Scene {
         this.shieldPowerupsCollected--;
       }, 100);
     }
+
   }
 }
