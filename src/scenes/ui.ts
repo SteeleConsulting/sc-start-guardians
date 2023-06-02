@@ -123,7 +123,7 @@ export default class UI extends Phaser.Scene {
       this.livesLabel.text = "Lives: " + this.lives;
     });
 
-    //player gains a life
+    // player gains a life
     events.on("life-gained", () => {
       this.lives++;
       this.livesLabel.text = "Lives: " + this.lives;
