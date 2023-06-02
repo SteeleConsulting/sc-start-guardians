@@ -379,6 +379,7 @@ export default class Level3 extends Phaser.Scene {
           spriteB.destroy();
           this.boss!.setVelocityY(-this.speed);
           this.explosionSound.play();
+          events.emit("asteroid-destroyed");
         }
       });
       setTimeout(() => {
@@ -436,21 +437,11 @@ export default class Level3 extends Phaser.Scene {
         if (spriteA?.getData("type") == "boss") {
           console.log("laser collided with enemy");
           // spriteA.destroy();
+          spriteB.destroy();
           this.bossLifes--;
           this.explosionSound.play();
           this.boss!.setVelocityY(-this.speed);
           events.emit("asteroid-destroyed");
-        }
-        if (spriteB?.getData("type") == "helper") {
-          console.log("Collided with laser powerup");
-          events.emit("laser-powerup");
-          this.laserPowerupActive = true;
-          spriteB.destroy();
-
-          setTimeout(() => {
-            this.laserPowerupActive = false;
-            console.log("laser powerup expired");
-          }, 5000);
         }
       });
 
