@@ -240,7 +240,7 @@ export default class UI extends Phaser.Scene {
       setTimeout(() => {
         shieldPowerup.destroy();
         this.shieldPowerupsCollected--;
-      }, 1000);
+      }, 100);
     }
   }
 }

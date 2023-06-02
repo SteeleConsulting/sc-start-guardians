@@ -16,9 +16,10 @@ export default class Level2 extends Phaser.Scene {
 
   private laserSound!: Phaser.Sound.BaseSound;
   private explosionSound!: Phaser.Sound.BaseSound;
-  private powerupSound!: Phaser.Sound.BaseSound;
   private backgroundMusic!: Phaser.Sound.BaseSound;
+  private powerupSound!: Phaser.Sound.BaseSound;
   private MarioSound!: Phaser.Sound.BaseSound;
+  private shieldBrokenSound!: Phaser.Sound.BaseSound;
   private speedPowerUpActive = false;
   private shieldPowerupActive = false;
 
@@ -36,7 +37,6 @@ export default class Level2 extends Phaser.Scene {
 
   preload() {
     this.load.image("star", "assets/star2.png");
-    this.load.image("boss", "assets/boss.png");
 
     this.load.atlas(
       "explosion",
@@ -59,11 +59,13 @@ export default class Level2 extends Phaser.Scene {
     this.load.audio("powerup", ["assets/sounds/powerup.wav"]);
     this.load.audio("pulsar", ["assets/sounds/pulsar-office.mp3"]);
     this.load.audio("mario", ["assets/sounds/SuperMarioBros-Star.mp3"]);
+    this.load.audio("shieldBroken", ["assets/sounds/cracked-shield.mp3"]);
   }
 
   create() {
     const { width, height } = this.scale; // width and height of the scene
     this.MarioSound = this.sound.add("mario");
+    this.shieldBrokenSound = this.sound.add("shieldBroken");
 
     // Add random stars background
     var bg = this.add.group({ key: "star", frameQuantity: 3000 });
@@ -79,6 +81,9 @@ export default class Level2 extends Phaser.Scene {
     const objectsLayer = map.getObjectLayer("objects");
     objectsLayer.objects.forEach((obj) => {
       const { x = 0, y = 0, name } = obj; // get the coordinates and name of the object from the tile map
+      // console.log(
+      //   "adding object from tilemap at x:" + x + " y:" + y + " name:" + name
+      // );
 
       // find where the objects are in the tile map and add sprites accordingly by object name
       switch (name) {
@@ -110,7 +115,6 @@ export default class Level2 extends Phaser.Scene {
             }
 
             if (spriteB?.getData("type") == "speedup") {
-              console.log("collided with speedup");
               events.emit("powerup-collided");
               this.powerupSound.play();
               this.MarioSound.play();
@@ -119,36 +123,26 @@ export default class Level2 extends Phaser.Scene {
               setTimeout(() => {
                 this.speedPowerUpActive = false;
                 events.emit("powerup-expired");
+                console.log("speedup expired");
               }, 5000);
             }
             //shield
             if (spriteB?.getData("type") == "shield") {
-              spriteB.destroy();
               events.emit("shield-collided");
-              this.shieldPowerupActive = true;
-              this.createShield(spriteA.x, spriteA.y);
-            }
-            if (spriteB?.getData("type") == "enemy") {
-              spriteB.play("enemy-explode");
-              setTimeout(() => {
-                spriteB.destroy();
-              }, 1000);
-              events.emit("life-lost");
-            }
-            if (spriteB?.getData("type") == "helper") {
-              console.log("Collided with laser powerup");
-              events.emit("laser-powerup");
-              this.laserPowerupActive = true;
+              this.shieldBrokenSound.play();
               spriteB.destroy();
-
-              setTimeout(() => {
-                this.laserPowerupActive = false;
-                console.log("laser powerup expired");
-              }, 5000);
+              this.createShield(spriteA.x, spriteA.y);
+              this.shieldPowerupActive = true;
+            }
+            if (
+              spriteB?.getData("type") == "enemy" &&
+              this.shieldPowerupActive == false
+            ) {
+              spriteB.destroy();
+              events.emit("life-lost");
             }
           });
           break;
-
         case "speedup":
           const speedup = this.matter.add.sprite(
             x,
@@ -177,21 +171,7 @@ export default class Level2 extends Phaser.Scene {
           );
           powerup.setBounce(1);
           powerup.setData("type", "shield");
-
-          const helperPowerup = this.matter.add.sprite(
-            x + Math.floor(Math.random() * 701),
-            y,
-            "space",
-            "Power-ups/powerupGreen_star.png",
-            {
-              isStatic: true,
-              isSensor: true,
-            }
-          );
-          helperPowerup.setBounce(1);
-          helperPowerup.setData("type", "helper");
           break;
-
         case "enemy":
           this.createEnemy(x + Math.floor(Math.random() * 701), y, -this.speed);
           break;
@@ -216,13 +196,13 @@ export default class Level2 extends Phaser.Scene {
       this.spaceship.x,
       this.spaceship.y + 50,
       "space",
-      "Effects/fire08.png",
+      "Effects/fire07.png",
       {
         isStatic: true,
         isSensor: true,
       }
     );
-    beam.flipY = true;
+    beam.flipY = false;
     setTimeout(() => {
       beam.destroy();
     }, 100);
@@ -231,8 +211,7 @@ export default class Level2 extends Phaser.Scene {
     this.cameras.main.scrollY -= this.normalSpeed;
     this.spaceship.setVelocityY(-this.normalSpeed);
     if (this.cameras.main.scrollY < 0) {
-      // start level 3 (Boss level)
-      console.log("Made it to 209");
+      console.log("Made it to 2");
       events.emit("bosslevel-up");
     }
 
@@ -241,6 +220,7 @@ export default class Level2 extends Phaser.Scene {
       this.speedPowerUpActive == true
         ? this.spaceship.setVelocityX(-this.powerUpSpeed)
         : this.spaceship.setVelocityX(-this.speed);
+
       if (this.spaceship.x < 50) this.spaceship.setX(50); // left boundary
       this.spaceship.flipX = false;
     } else if (this.cursors.right.isDown) {
@@ -275,8 +255,22 @@ export default class Level2 extends Phaser.Scene {
         this.shootSpeed,
         0
       );
+
       this.sound.play("laser");
     }
+  }
+  spawnHelpers() {
+    var helper = this.matter.add.sprite(
+      this.spaceship!.x + 80,
+      this.spaceship!.y,
+      "space",
+      "UI/playerLife3_red.png",
+      {
+        isSensor: true,
+      }
+    );
+    this.upgraded;
+    helper.setData("type", "helper");
   }
 
   createEnemy(x, y, speed) {
@@ -298,7 +292,6 @@ export default class Level2 extends Phaser.Scene {
   }
 
   createShield(x, y) {
-    this.shieldPowerupActive = true;
     const shield = this.matter.add.sprite(
       x,
       y,
@@ -318,14 +311,14 @@ export default class Level2 extends Phaser.Scene {
 
       if (!spriteA?.getData || !spriteB?.getData) return;
 
-      if (spriteA?.getData("type") == "meteor") {
+      if (spriteA?.getData("type") == "enemy") {
         console.log("shield collided with enemy");
         spriteA.destroy();
         spriteB.destroy();
-        this.shieldPowerupActive = false;
         this.explosionSound.play();
         events.emit("shield-expired");
-        events.emit("asteroid-destroyed");
+        events.emit("enemy-killed");
+        this.shieldPowerupActive = false;
       }
     });
   }
@@ -361,7 +354,9 @@ export default class Level2 extends Phaser.Scene {
           console.log("laser collided with enemy");
           spriteA.destroy();
           spriteB.destroy();
+
           this.explosionSound.play();
+          events.emit("enemy-killed");
         }
       });
       setTimeout(() => {
@@ -389,7 +384,9 @@ export default class Level2 extends Phaser.Scene {
         if (spriteA?.getData("type") == "enemy") {
           console.log("laser collided with enemy");
           spriteA.destroy();
+
           this.explosionSound.play();
+          events.emit("enemy-killed");
         }
       });
 
@@ -417,7 +414,9 @@ export default class Level2 extends Phaser.Scene {
         if (spriteA?.getData("type") == "enemy") {
           console.log("laser collided with enemy");
           spriteA.destroy();
+
           this.explosionSound.play();
+          events.emit("enemy-killed");
         }
       });
 

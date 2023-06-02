@@ -131,11 +131,12 @@ export default class Level3 extends Phaser.Scene {
             }
             //shield
             if (spriteB?.getData("type") == "shield") {
-              this.shieldBrokenSound.play();
+              //   this.shieldBrokenSound.play();
               spriteB.destroy();
               events.emit("shield-collided");
-              this.shieldPowerupActive = true;
-              this.createShield(spriteA.x, spriteA.y);
+              //   this.createShield(spriteA.x, spriteA.y);
+              console.log(this.shieldPowerupActive);
+              console.log("afdbsdfbsm");
             }
             if (
               spriteB?.getData("type") == "meteor" &&
@@ -143,11 +144,6 @@ export default class Level3 extends Phaser.Scene {
             ) {
               spriteB.destroy();
               events.emit("life-lost");
-            } else if (
-              spriteB?.getData("type") == "meteor" &&
-              this.shieldPowerupActive == true
-            ) {
-              spriteB.destroy();
             }
             if (spriteB?.getData("type") == "helper") {
               console.log("Collided with laser powerup");
@@ -314,6 +310,7 @@ export default class Level3 extends Phaser.Scene {
 
   createShield(x, y) {
     this.shieldPowerupActive = true;
+
     const shield = this.matter.add.sprite(
       x,
       y,
