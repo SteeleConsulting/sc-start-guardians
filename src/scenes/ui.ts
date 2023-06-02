@@ -135,14 +135,14 @@ export default class UI extends Phaser.Scene {
     // reached to level up
     events.on("level-up", () => {
       this.level++;
-      this.levelsLabel.text = "Level: " + this.level;
+      // this.levelsLabel.text = "Level: " + this.level;
       this.scene.start("leveltitlescreen");
     });
 
     //  reaches boss level
     events.on("bosslevel-up", () => {
       console.log("Made it to the UI event");
-      this.level++;
+      // this.level++;
       this.levelsLabel.text = "Level: " + this.level;
       this.scene.start("bosstitlescreen");
     });
@@ -172,54 +172,6 @@ export default class UI extends Phaser.Scene {
       events.emit("gameover");
       this.gameFinished = true;
     }
-
-    /**
-     * display level asset according to level number
-     */
-    // switch (this.level) {
-    //   case 1:
-    //     const level1Image = this.matter.add.sprite(
-    //       150,
-    //       68,
-    //       "space",
-    //       "UI/numeral1.png",
-    //       {
-    //         isStatic: true,
-    //         isSensor: true,
-    //       }
-    //     );
-    //     level1Image.setData("type", "level1");
-    //     break;
-    //   case 2:
-    //     const level2Image = this.matter.add.sprite(
-    //       150,
-    //       65,
-    //       "space",
-    //       "UI/numeral2.png",
-    //       {
-    //         isStatic: true,
-    //         isSensor: true,
-    //       }
-    //     );
-    //     level2Image.setData("type", "level2");
-    //     break;
-    //   case 3:
-    //     const level3Image = this.matter.add.sprite(
-    //       150,
-    //       65,
-    //       "space",
-    //       "UI/numeral3.png",
-    //       {
-    //         isStatic: true,
-    //         isSensor: true,
-    //       }
-    //     );
-    //     level3Image.setData("type", "level3");
-    //     break;
-
-    //   default:
-    //     break;
-    // }
 
     if (this.shieldPowerupsCollected > 0) {
       const shieldPowerup = this.matter.add.sprite(
