@@ -11,7 +11,7 @@ export default class StartScreen extends Phaser.Scene {
   init() {}
 
   preload() {
-    this.load.audio("neon", ["assets/sounds/neon-sky.mp3"]);
+    this.load.audio("raging", ["assets/sounds/dbraging.mp3"]);
   }
 
   create() {
@@ -26,7 +26,7 @@ export default class StartScreen extends Phaser.Scene {
     this.input.keyboard.on("keydown-SPACE", this.startScene, this);
 
     //loading music here
-    this.titleScreenMusic = this.sound.add("neon")
+    this.titleScreenMusic = this.sound.add("raging")
     this.titleScreenMusic.play()
   }
 
@@ -34,7 +34,7 @@ export default class StartScreen extends Phaser.Scene {
 
   startScene() {
     this.scene.start("game");
-    this.sound.stopByKey("neon")
+    this.sound.stopByKey("raging")
     this.game.scene.remove("startscreen");
   }
 }
