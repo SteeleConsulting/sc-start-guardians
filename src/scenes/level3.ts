@@ -137,8 +137,6 @@ export default class Level3 extends Phaser.Scene {
               spriteB.destroy();
               events.emit("shield-collided");
               //   this.createShield(spriteA.x, spriteA.y);
-              console.log(this.shieldPowerupActive);
-              console.log("afdbsdfbsm");
             }
             if (
               spriteB?.getData("type") == "meteor" &&
@@ -211,7 +209,7 @@ export default class Level3 extends Phaser.Scene {
           );
           this.boss.setVelocityY(-this.normalSpeed);
           this.boss.setData("type", "boss");
-          this.bossLifes = 20;
+          this.bossLifes = 50;
           break;
       }
     });

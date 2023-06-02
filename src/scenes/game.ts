@@ -79,7 +79,6 @@ export default class Game extends Phaser.Scene {
     // load tilemap with object locations
     const map = this.make.tilemap({ key: "spacemap" });
     const objectsLayer = map.getObjectLayer("objects");
-    console.log(map);
 
     objectsLayer.objects.forEach((obj) => {
       const { x = 0, y = 0, name } = obj; // get the coordinates and name of the object from the tile map
