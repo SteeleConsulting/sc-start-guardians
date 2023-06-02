@@ -16,8 +16,8 @@ export default class BossTitleScreen extends Phaser.Scene {
   }
 
   create() {
-    // this.levelUpSound = this.sound.add("levelup");
-    // this.levelUpSound.play();
+    this.levelUpSound = this.sound.add("levelup");
+    this.levelUpSound.play();
 
     console.log("Got to the boss title screen");
     this.add.text(600, 480, "Level 3", {
