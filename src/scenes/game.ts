@@ -340,7 +340,6 @@ export default class Game extends Phaser.Scene {
         console.log("shield collided with enemy");
         spriteA.destroy();
         spriteB.destroy();
-        this.shieldPowerupActive = false;
         this.explosionSound.play();
         events.emit("shield-expired");
         events.emit("asteroid-destroyed");

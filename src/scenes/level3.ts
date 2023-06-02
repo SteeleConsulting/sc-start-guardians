@@ -405,6 +405,7 @@ export default class Level3 extends Phaser.Scene {
 
         if (spriteA?.getData("type") == "boss") {
           console.log("laser collided with boss");
+          spriteA.setVelocityY(-this.turboSpeed);
         }
       });
 
