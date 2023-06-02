@@ -137,8 +137,6 @@ export default class Level3 extends Phaser.Scene {
               spriteB.destroy();
               events.emit("shield-collided");
               //   this.createShield(spriteA.x, spriteA.y);
-              console.log(this.shieldPowerupActive);
-              console.log("afdbsdfbsm");
             }
             if (
               spriteB?.getData("type") == "meteor" &&
@@ -212,7 +210,14 @@ export default class Level3 extends Phaser.Scene {
           );
           this.boss.setVelocityY(-this.normalSpeed);
           this.boss.setData("type", "boss");
-          this.bossLifes = 20;
+          this.bossLifes = 50;
+
+          setTimeout(() => {
+            this.boss?.setVelocityX(Math.floor(Math.random() * 5));
+          }, 2000);
+          setTimeout(() => {
+            this.boss?.setVelocityX(-Math.floor(Math.random() * 10));
+          }, 4000);
           break;
       }
     });
@@ -380,6 +385,7 @@ export default class Level3 extends Phaser.Scene {
           spriteB.destroy();
           this.boss!.setVelocityY(-this.speed);
           this.explosionSound.play();
+          events.emit("asteroid-destroyed");
         }
       });
       setTimeout(() => {
@@ -406,7 +412,7 @@ export default class Level3 extends Phaser.Scene {
 
         if (spriteA?.getData("type") == "boss") {
           console.log("laser collided with boss");
-          // spriteA.destroy();
+          spriteB.destroy();
           this.bossLifes--;
           this.explosionSound.play();
           events.emit("asteroid-destroyed");
@@ -437,21 +443,11 @@ export default class Level3 extends Phaser.Scene {
         if (spriteA?.getData("type") == "boss") {
           console.log("laser collided with enemy");
           // spriteA.destroy();
+          spriteB.destroy();
           this.bossLifes--;
           this.explosionSound.play();
           this.boss!.setVelocityY(-this.speed);
           events.emit("asteroid-destroyed");
-        }
-        if (spriteB?.getData("type") == "helper") {
-          console.log("Collided with laser powerup");
-          events.emit("laser-powerup");
-          this.laserPowerupActive = true;
-          spriteB.destroy();
-
-          setTimeout(() => {
-            this.laserPowerupActive = false;
-            console.log("laser powerup expired");
-          }, 5000);
         }
       });
 
@@ -459,6 +455,12 @@ export default class Level3 extends Phaser.Scene {
       setTimeout(() => laser2.destroy(), 3000);
     }
     console.log(this.bossLifes);
+    if (this.bossLifes < 1) {
+      this.boss?.play("spaceship-explode");
+      setTimeout(() => {
+        this.boss?.destroy();
+      }, 2000);
+    }
   }
 
   private createSpaceshipAnimations() {
