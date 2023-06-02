@@ -36,6 +36,7 @@ export default class Level3 extends Phaser.Scene {
     // load the other scenes
     this.scene.launch("ui");
     this.scene.launch("gameover");
+    this.scene.launch("gamecomplete");
   }
 
   preload() {
@@ -459,6 +460,8 @@ export default class Level3 extends Phaser.Scene {
       this.boss?.play("spaceship-explode");
       setTimeout(() => {
         this.boss?.destroy();
+        this.backgroundMusic.pause();
+        events.emit("game-complete");
       }, 2000);
     }
   }

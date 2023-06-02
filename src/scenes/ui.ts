@@ -51,12 +51,12 @@ export default class UI extends Phaser.Scene {
       color: "white",
     });
 
-    this.scoreLabel = this.add.text(1400, 10, "Score: " + this.score, {
+    this.scoreLabel = this.add.text(1350, 10, "Score: " + this.score, {
       fontSize: "32px",
       color: "white",
     });
 
-    this.livesLabel = this.add.text(1400, 50, "Lives: " + this.lives, {
+    this.livesLabel = this.add.text(1350, 50, "Lives: " + this.lives, {
       fontSize: "32px",
       color: "white",
     });
